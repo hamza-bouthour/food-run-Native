@@ -48,15 +48,6 @@ const mapStateToProps = populars => {
         populars
     };
 };
-// const MainNavigator = createDrawerNavigator(
-//     {
-//         Home: { screen: HomeNavigator },
-      
-//     },
-//     {
-//         drawerBackgroundColor: '#CEC8FF'
-//     }
-// );
 const MainNavigator = createDrawerNavigator(
     {
         Home: { screen: HomeNavigator },
@@ -65,9 +56,7 @@ const MainNavigator = createDrawerNavigator(
 )
 const AppNavigator = createAppContainer(MainNavigator)
  class Main extends Component {
-    // componentDidMount() {
-    //     this.props.fetchPopulars();
-    // }
+
     render() {
         return (
             <View
