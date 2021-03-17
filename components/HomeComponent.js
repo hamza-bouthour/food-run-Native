@@ -34,7 +34,7 @@ static navigationOptions = {
   componentDidMount() {
         this.props.fetchPopulars();
         // console.log(this.state.populars)
-        this.props.populars.populars
+        
     }
     render() {
         const { navigate } = this.props.navigation;

@@ -1,10 +1,9 @@
 import * as ActionTypes from './ActionTypes';
-// const popularsJs = require('../shared/fake.json')
-// const uri = '../shared/fake.json/'
-// const popularsJson = JSON.stringify(popularsJs)
-import { POPULARS } from '../shared/populars'
+import { POPULARS } from '../shared/populars';
+import { PRODUCTS } from '../shared/products'
+
+// POPULAR DISHES ACTIONS
 export const fetchPopulars = () => dispatch => {
-    console.log('../shared/popularsJSON.json')
     dispatch(popularsLoading())
     setTimeout(() => {
         dispatch(addPopulars(POPULARS))
@@ -22,4 +21,25 @@ export const popularsFailed = errMess => ({
 export const addPopulars = populars => ({
     type: ActionTypes.ADD_POPULARS,
     payload: populars
+});
+
+// PRODUCTS ACTIONS
+export const fetchProducts = () => dispatch => {
+    dispatch(productsLoading())
+    setTimeout(() => {
+        dispatch(addProducts(PRODUCTS))
+    }, 1000);
+}
+export const productsLoading = () => ({
+    type: ActionTypes.PRODUCTS_LOADING
+});
+
+export const productsFailed = errMess => ({
+    type: ActionTypes.PRODUCTS_FAILED,
+    payload: errMess
+});
+
+export const addProducts = products => ({
+    type: ActionTypes.ADD_PRODUCTS,
+    payload: products
 });
