@@ -47,16 +47,25 @@ export const addProducts = products => ({
 
 // CART ACTIONS
 
-export const addProductToCart = productId => ({
+export const addProductToCart = (productId) => ({
     type:ActionTypes.ADD_PRODUCT_TO_CART,
     payload: 
-        products.push(productId)
+        productId
     
 })
-export const removeProductFromCart = productId => ({
+export const addProductToTotal = (productPrice) => ({
+    type:ActionTypes.ADD_PRODUCT_COST_TO_TOTAL,
+    payload: 
+        productPrice
+    
+})
+export const removeProductFromCart = (productId, price) => ({
     type: ActionTypes.REMOVE_PRODUCT_FROM_CART,
     payload: 
-        delete products[productId]
+        {
+            productId: productId,
+            price: price
+        }
     
 })
 export const removeAllProductsFromCart = () => ({

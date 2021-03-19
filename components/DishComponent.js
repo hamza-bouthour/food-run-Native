@@ -5,9 +5,13 @@ import { fetchProducts } from '../redux/ActionCreators';
 import { connect } from 'react-redux';
 import { PRODUCTS } from '../shared/products';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { addProductToCart } from '../redux/ActionCreators';
+import { addProductToTotal } from '../redux/ActionCreators';
 
 const mapDispatchToProps = {
-    fetchProducts
+    fetchProducts,
+    addProductToCart,
+    addProductToTotal
 };
 const mapStateToProps = (populars, products) => {
     return {
@@ -37,9 +41,9 @@ function RenderDishDetails(props) {
         return (
             <View style={ {padding: 13, marginBottom: 5}}>
                 <Text style={{marginBottom: 20}}>{dish.description}</Text>
-                {dish.directions.map(dir => {
+                {dish.directions.map((dir, i) => {
                     return (
-                        <Text>{dir}</Text>
+                        <Text key={i}>{dir}</Text>
                     )
                 })} 
             </View>
@@ -50,9 +54,9 @@ function RenderProduct(props) {
     const {product} = props
     if (product) {
         return (
-            <View> 
+            <View key={product.productId}> 
                 <Card
-                    key={product.productId}
+
                     containerStyle={styles.cardProduct}
                     title={product.name}
                 >
@@ -71,6 +75,9 @@ function RenderProduct(props) {
                             />
                         }
                         title="Add"
+                        onPress={()=> {
+                            props.addTocart()
+                        }}
                         />
                 </Card>
             </View>
@@ -92,7 +99,11 @@ class Dish extends Component {
 
 componentDidMount() {
     this.props.fetchProducts()
-}    
+}   
+addTocart(productId) {
+    this.props.addProductToCart(productId);
+    this.props.addProductToTotal(this.state.products.filter(x=> x.productId === productId)[0].price)
+} 
 render() {
         
         const dishPopularId = this.props.navigation.getParam('dishId')
@@ -102,15 +113,15 @@ render() {
         return (
             <ScrollView>
                 
-                <RenderDish dish={dish} />
-                <RenderDishDetails dish={dish} />
+                <RenderDish dish={dish} key={dish.id} />
+                <RenderDishDetails key={dish.id + 20} dish={dish} />
                 <ScrollView
                     horizontal={true}
                     style={{marginBottom: 50}}   
                 >
                 {products.map(p => {
                     return (
-                        <RenderProduct product={p} />
+                        <RenderProduct  product={p} addTocart={() => this.addTocart(p.productId)}/>
                     )
                 })}
                 </ScrollView>
