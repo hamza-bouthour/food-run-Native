@@ -71,3 +71,8 @@ export const removeProductFromCart = (productId, price) => ({
 export const removeAllProductsFromCart = () => ({
     type: ActionTypes.REMOVE_ALL_PRODUCTS_FROM_CART 
 })
+
+export const markFavorite = (dishPopularId) => ({
+    type: ActionTypes.MARK_FAVORITE,
+    payload: dishPopularId
+})

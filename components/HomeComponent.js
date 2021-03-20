@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text } from 'react-native';
 import { fetchPopulars } from '../redux/ActionCreators';
+import { fetchProducts } from '../redux/ActionCreators'
 import { connect } from 'react-redux';
 import { FlatList, ScrollView, StyleSheet } from 'react-native';
 import { ListItem, Tile } from 'react-native-elements';
@@ -16,7 +17,8 @@ import { NavigationEvents } from 'react-navigation';
 
 
 const mapDispatchToProps = {
-    fetchPopulars
+    fetchPopulars,
+    fetchProducts
 };
 const mapStateToProps = populars => {
     return {
@@ -33,6 +35,7 @@ static navigationOptions = {
 };
   componentDidMount() {
         this.props.fetchPopulars();
+        this.props.fetchProducts()
         // console.log(this.state.populars)
         
     }

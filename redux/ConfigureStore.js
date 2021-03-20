@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import { products } from './productsReducer';
 import { populars } from './popularDishesReducer';
 import { cart } from './cartReducer';
+import { favorites } from './favortiesReducer'
 import { composeWithDevTools } from 'redux-devtools-extension';
 import logger from 'redux-logger';
 
@@ -13,7 +14,8 @@ export const ConfigureStore = () => {
         combineReducers({
             products,
             populars,
-            cart
+            cart,
+            favorites
         }),
         composeWithDevTools(applyMiddleware(thunk, logger))
     );
