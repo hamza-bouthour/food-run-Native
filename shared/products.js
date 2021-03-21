@@ -25,7 +25,7 @@
 // ]
 export const PRODUCTS = [
     { img: 'https://i.postimg.cc/mr41T347/salt.png', price: 3.87, name: "Salt", productId: 0, dishId: [2, 3,4, 5, 1]},
-    { img: 'https://i.postimg.cc/jdJDN3dz/chicken.jpg', price: 5.94, name: "Boneless Chicken", productId: 1, dishId: [1,8,4]},
+    { img: 'https://i.postimg.cc/jdJDN3dz/chicken.jpg', price: 5.94, name: "Chicken", productId: 1, dishId: [1,8,4]},
     { img: 'https://i.postimg.cc/Z5tCLPCX/pepper.jpg', price: 3.18, name: "Black pepper", productId: 2, dishId: [2, 3,4, 5, 1, 6, 8]},
     { img: 'https://i.postimg.cc/W1GtYDZz/cheese.jpg', price: 1.84, name: "Swiss cheese", productId: 3, dishId: [1, 2, 3]},
     { img: 'https://i.postimg.cc/FKhzM9bZ/ham.png', price: 3.97, name: "Cooked Ham", productId: 4, dishId: [1]},

@@ -4,6 +4,7 @@ import { products } from './productsReducer';
 import { populars } from './popularDishesReducer';
 import { cart } from './cartReducer';
 import { favorites } from './favortiesReducer'
+import { account } from './accountReducer'
 import { composeWithDevTools } from 'redux-devtools-extension';
 import logger from 'redux-logger';
 
@@ -15,7 +16,8 @@ export const ConfigureStore = () => {
             products,
             populars,
             cart,
-            favorites
+            favorites,
+            account
         }),
         composeWithDevTools(applyMiddleware(thunk, logger))
     );

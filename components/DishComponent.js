@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, FlatList, Modal, StyleSheet, TextInput, ImageBackground, Alert } from 'react-native';
-import { Card, Rating, Input, Tile, Image, Button } from 'react-native-elements';
+import { Text, View, ScrollView, FlatList, Modal, StyleSheet, TextInput, ImageBackground, Alert, Image } from 'react-native';
+import { Card, Rating, Input, Tile, Button } from 'react-native-elements';
 import { fetchProducts } from '../redux/ActionCreators';
 import { connect } from 'react-redux';
 import { PRODUCTS } from '../shared/products';
@@ -67,13 +67,27 @@ function RenderDish(props) {
                 </TouchableOpacity>
             </View>
             <View>
-                <Tile
+                <Card
+                    containerStyle={{borderColor: '#039FB6', borderRadius: 5}}
                     title={dish.name}
                     imageSrc={{uri: dish.img}}
                     featured={true}
                     activeOpacity={1.5}
-                >               
-                </Tile>           
+                >   
+                    <Image 
+                        style={{width: 350, height: 250, borderRadius: 5,borderColor: '#039FB6', marginBottom: 2}}
+                        resizeMode="cover"
+                        source={{ uri: dish.img }}
+                    />
+                    <View 
+                    style={styles.cardCaptions}
+                    >
+                        <Text style={{marginRight: 10}}>Cost: {dish.cost} <Icon name="clock-o" color="darkgreen" size={15}/></Text>
+                        <Text style={{marginLeft: 5}}>Time: {dish.time} <Icon name="dollar" color="darkgreen" size={15}/></Text>
+                    </View>
+                   
+                          
+                </Card>           
             </View>
          </SwipeRow>
         )
@@ -93,6 +107,31 @@ function RenderDishDetails(props) {
             </View>
         )
     }
+}
+function RenderNavCart(props) {
+    return (
+        <View style={styles.productsNav}>
+            <Icon    
+                raised
+                type='font-awesome'
+                reverse
+                name="home"
+                size={35}
+                color="#039FB6"
+                onPress={() => props.navigation.navigate('Home')}
+                />
+            <Icon 
+                raised
+                type='font-awesome'
+                reverse
+                name="shopping-cart"
+                size={35}
+                color="#039FB6"
+                onPress={() => props.navigation.navigate('Home')}
+                ><Text>{props.productsNumber}</Text></Icon>
+                <Text style={{marginLeft: 5}}>{props.total}<Icon name="dollar" color="darkgreen" size={15}/></Text>  
+        </View>
+    )
 }
 function RenderProduct(props) {
     const {product} = props
@@ -186,12 +225,13 @@ render() {
                     horizontal={true}
                     style={{marginBottom: 50}}   
                 >
-                {products.map(p => {
-                    return (
-                        <RenderProduct  product={p} addTocart={() => this.addTocart(p.productId)} removeProductFromCart={() => this.props.removeProductFromCart(p.productId, p.price)} productInCart={this.props.populars.cart.products.includes(p.productId)}/>
-                    )
-                })}
+                    {products.map(p => {
+                        return (
+                            <RenderProduct  product={p} addTocart={() => this.addTocart(p.productId)} removeProductFromCart={() => this.props.removeProductFromCart(p.productId, p.price)} productInCart={this.props.populars.cart.products.includes(p.productId)}/>
+                        )
+                    })}
                 </ScrollView>
+                <RenderNavCart navigation={this.props.navigation} productsNumber={this.props.populars.cart.products.length} total={this.props.populars.cart.total}/>
             </ScrollView>
         )
     }
@@ -200,6 +240,15 @@ const styles = StyleSheet.create({
     productsContainer: {
         flexDirection: 'row',
         justifyContent: 'center' 
+    },
+    productsNav: {
+        flexDirection: 'row',
+        justifyContent: 'space-around' 
+    },
+    cardCaptions: {
+        flexDirection: 'row',
+        justifyContent: 'center'
+        
     },
  
     productBtn: {
@@ -229,6 +278,21 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         marginLeft: 30,
         
+    },
+    shadow: {
+        shadowColor: 'black',
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+        // iOS
+        shadowOffset: {
+            width: 0,            // These can't both be 0
+            height: 1,           // i.e. the shadow has to be offset in some way
+        },
+        // Android
+        shadowOffset: {
+            width: 0,            // Same rules apply from above
+            height: 1,           // Can't both be 0
+        },
     }
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Dish);

@@ -7,7 +7,9 @@ import SafeAreaView from 'react-native-safe-area-view';
 import { connect } from 'react-redux';
 import  Home  from './HomeComponent'
 import Dish from './DishComponent';
-import Cart from './CartComponent'
+import Cart from './CartComponent';
+import Favorites from './FavoritesComponent';
+import Account from './AccountComponent'
 import { fetchPopulars } from '../redux/ActionCreators'
 import { populars } from '../redux/popularDishesReducer';
 // import { NavigationContainer } from '@react-navigation/native';
@@ -37,6 +39,52 @@ const HomeNavigator = createStackNavigator(
 const CartNavigator = createStackNavigator(
     {
         Cart: { screen: Cart }
+    },
+    {
+        initialRouteName: 'Cart',
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor: '#039FB6'
+            },
+            headerTintColor: 'white',
+            headerTitleStyle: {
+                color: '#fff'
+            }
+        }
+    }
+)
+const AccountNavigator = createStackNavigator(
+    {
+        Account: { screen: Account}
+    },
+    {
+        initialRouteName: 'Account',
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor: '#039FB6'
+            },
+            headerTintColor: 'white',
+            headerTitleStyle: {
+                color: '#fff'
+            }
+        }
+    }
+)
+const FavoritesNavigator = createStackNavigator(
+    {
+        Favorites: { screen: Favorites }
+    },
+    {
+        initialRouteName: 'Favorites',
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor: '#039FB6'
+            },
+            headerTintColor: 'white',
+            headerTitleStyle: {
+                color: '#fff'
+            }
+        }
     }
 )
 const mapDispatchToProps = {
@@ -51,7 +99,9 @@ const mapStateToProps = populars => {
 const MainNavigator = createDrawerNavigator(
     {
         Home: { screen: HomeNavigator },
+        Account: { screen: AccountNavigator},
         Cart: { screen: CartNavigator },
+        Favorites: { screen: FavoritesNavigator }
     }
 )
 const AppNavigator = createAppContainer(MainNavigator)
