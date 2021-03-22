@@ -12,6 +12,7 @@ import { populars } from '../redux/popularDishesReducer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { NavigationEvents } from 'react-navigation';
+import BottomNavBarComponent from './BottomNavBarComponent';
 
 
 
@@ -74,13 +75,17 @@ static navigationOptions = {
             );
         }
         return (
-            <FlatList
-                data={this.props.populars.populars.populars}
-                renderItem={renderDirectoryItem}
-                keyExtractor={item => item.id.toString()}
-                horizontal={false}
-                numColumns={1}
-            />
+            <ScrollView>
+                <FlatList
+                    data={this.props.populars.populars.populars}
+                    renderItem={renderDirectoryItem}
+                    keyExtractor={item => item.id.toString()}
+                    horizontal={false}
+                    numColumns={1}
+                />
+                <BottomNavBarComponent  navigation={this.props.navigation}/>
+            </ScrollView>
+            
         );
     }
 }
@@ -88,7 +93,8 @@ static navigationOptions = {
 const styles= StyleSheet.create({
     cardCaptions: {
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
+    
         
     },
    

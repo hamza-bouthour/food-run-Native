@@ -1,27 +1,45 @@
-import React, { Component } from 'react';
-import { Text, View, ScrollView, FlatList, Modal, Button, StyleSheet, TextInput } from 'react-native';
+import React, { Component } from 'react'
+import { View, Text } from 'react-native';
+import { fetchPopulars } from '../redux/ActionCreators';
+import { fetchProducts } from '../redux/ActionCreators'
 import { connect } from 'react-redux';
-import { fetchProducts } from '../redux/ActionCreators';
+import { FlatList, ScrollView, StyleSheet } from 'react-native';
+import { ListItem, Tile } from 'react-native-elements';
+import Loading from './LoadingComponent';
+import { POPULARS } from '../shared/populars'
+
+import { populars } from '../redux/popularDishesReducer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { NavigationEvents } from 'react-navigation';
+import BottomNavBarComponent from './BottomNavBarComponent';
+
+
 
 
 const mapDispatchToProps = {
+    fetchPopulars,
     fetchProducts
 };
-const mapStateToProps = (populars, products,favorites) => {
+const mapStateToProps = populars => {
     return {
-        products,
-        populars,
-        favorites
+        
+        populars
     };
 };
 
+
  class Favorites extends Component {
-    static navigationOptions = {
-        title: 'Favorites'
+
+static navigationOptions = {
+        title: 'Home'
 };
-// componentDidMount() {
-//     this.props.fetchProducts();
-// }
+  componentDidMount() {
+        this.props.fetchPopulars();
+        this.props.fetchProducts()
+        // console.log(this.state.populars)
+        
+    }
     render() {
         const { navigate } = this.props.navigation;
         const renderDirectoryItem = ({item}) => {
@@ -57,14 +75,30 @@ const mapStateToProps = (populars, products,favorites) => {
             );
         }
         return (
-            <FlatList
-                data={this.props.populars.populars.populars}
-                renderItem={renderDirectoryItem}
-                keyExtractor={item => item.id.toString()}
-                horizontal={false}
-                numColumns={1}
-            />
+            <ScrollView>
+                <FlatList
+                    data={this.props.populars.populars.populars}
+                    renderItem={renderDirectoryItem}
+                    keyExtractor={item => item.id.toString()}
+                    horizontal={false}
+                    numColumns={1}
+                />
+                <BottomNavBarComponent  navigation={this.props.navigation}/>
+            </ScrollView>
+            
         );
     }
 }
+
+const styles= StyleSheet.create({
+    cardCaptions: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+    
+        
+    },
+   
+
+})
 export default connect(mapStateToProps, mapDispatchToProps)(Favorites);
+// export default Home

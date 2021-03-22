@@ -11,6 +11,7 @@ import { markFavorite } from '../redux/ActionCreators';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import BottomNavBarComponent from './BottomNavBarComponent'
 
 const mapDispatchToProps = {
     fetchProducts,
@@ -127,7 +128,7 @@ function RenderNavCart(props) {
                 name="shopping-cart"
                 size={35}
                 color="#039FB6"
-                onPress={() => props.navigation.navigate('Home')}
+                onPress={() => props.navigation.navigate('Cart')}
                 ><Text>{props.productsNumber}</Text></Icon>
                 <Text style={{marginLeft: 5}}>{props.total}<Icon name="dollar" color="darkgreen" size={15}/></Text>  
         </View>
@@ -231,7 +232,8 @@ render() {
                         )
                     })}
                 </ScrollView>
-                <RenderNavCart navigation={this.props.navigation} productsNumber={this.props.populars.cart.products.length} total={this.props.populars.cart.total}/>
+               
+                <BottomNavBarComponent  navigation={this.props.navigation}/>
             </ScrollView>
         )
     }
@@ -296,6 +298,7 @@ const styles = StyleSheet.create({
     }
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Dish);
+// <RenderNavCart navigation={this.props.navigation} productsNumber={this.props.populars.cart.products.length} total={this.props.populars.cart.total}/>
 
 
 
