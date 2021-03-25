@@ -11,7 +11,8 @@ import { markFavorite } from '../redux/ActionCreators';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import BottomNavBarComponent from './BottomNavBarComponent'
+import BottomNavBarComponent from './BottomNavBarComponent';
+import Loading from './LoadingComponent';
 
 const mapDispatchToProps = {
     fetchProducts,
@@ -69,22 +70,22 @@ function RenderDish(props) {
             </View>
             <View>
                 <Card
-                    containerStyle={{borderColor: '#039FB6', borderRadius: 5}}
-                    title={dish.name}
+                    containerStyle={{borderColor: '#fff', borderRadius: 5, padding: 0}}
+                    
                     imageSrc={{uri: dish.img}}
                     featured={true}
                     activeOpacity={1.5}
                 >   
                     <Image 
-                        style={{width: 350, height: 250, borderRadius: 5,borderColor: '#039FB6', marginBottom: 2}}
+                        style={{width: 362, height: 250,borderColor: '#039FB6', marginBottom: 2}}
                         resizeMode="cover"
                         source={{ uri: dish.img }}
                     />
                     <View 
                     style={styles.cardCaptions}
                     >
-                        <Text style={{marginRight: 10}}>Cost: {dish.cost} <Icon name="clock-o" color="darkgreen" size={15}/></Text>
-                        <Text style={{marginLeft: 5}}>Time: {dish.time} <Icon name="dollar" color="darkgreen" size={15}/></Text>
+                        <Text style={{marginRight: 10, color: '#3b4e76', fontSize: 15}}>Cost: {dish.cost} <Icon name="clock-o" color="#E78200" size={15}/></Text>
+                        <Text style={{marginLeft: 5, color: '#3b4e76', fontSize: 15}}>Time: {dish.time} <Icon name="dollar" color="#E78200" size={15}/></Text>
                     </View>
                    
                           
@@ -136,55 +137,58 @@ function RenderNavCart(props) {
 }
 function RenderProduct(props) {
     const {product} = props
-    if (product) {
-        return (
-            <View key={product.productId}> 
-                <Card
-                    containerStyle={{borderColor: props.productInCart? 'green' : '#05D6F5',borderRadius: 15}}
-                    
-                    title={product.name}         
-                >
-                    <Image 
-                        source={{uri: product.img}}
-                        style={{width: 130, height: 130}}
-                        resizeMode={'cover'}
-                    />
-                    <Text style={{marginTop: 10}}>{product.price} <Icon name="dollar" color="darkgreen" size={15}/></Text>
-                    <View style={styles.productBtn}>
-                        {!props.productInCart ?
-                            <TouchableOpacity
-                                style={styles.productBtn}
-                                onPress={()=> {
-                                    props.addTocart()
-                                }}
-                                >
-                                <Icon
-                                    reverse
-                                    name='plus-circle'
-                                    type='font-awesome'
-                                    color='#039FB6'
-                                    size={30}
-                                />
-                            </TouchableOpacity> :
-                            <TouchableOpacity
-                                style={styles.productBtn}
-                                onPress={()=> {
-                                    props.removeProductFromCart()
-                                }}
+
+    return (
+        <View key={product.productId}> 
+            <Card
+                containerStyle={{borderColor: props.productInCart? 'green' : 'yellowgreen',borderRadius: 15}}
+                
+                title={product.name}         
+            >
+                <Image 
+                    source={{uri: product.img}}
+                    style={{width: 130, height: 130}}
+                    resizeMode={'cover'}
+                />
+                <Text style={{marginTop: 10}}>{product.price} <Icon name="dollar" color="#3b4e76" size={15}/></Text>
+                <View style={styles.productBtn}>
+                    {!props.productInCart ?
+                        <TouchableOpacity
+                            style={styles.productBtn}
+                            onPress={()=> {
+                                props.addTocart()
+                            }}
                             >
-                                <Icon
-                                    reverse
-                                    name='times'
-                                    type='font-awesome'
-                                    color='red'
-                                    size={30}
-                                />
-                            </TouchableOpacity>}
-                    </View>
-                </Card>
-            </View>
-        )
-    }
+                            <Icon
+                                reverse
+                                name='plus-circle'
+                                type='font-awesome'
+                                color='#E78200'
+                                size={30}
+                            />
+                        </TouchableOpacity> :
+                        <TouchableOpacity
+                            style={styles.productBtn}
+                            onPress={()=> {
+                                props.removeProductFromCart()
+                            }}
+                        >
+                            <Icon
+                                reverse
+                                name='times'
+                                type='font-awesome'
+                                color='red'
+                                size={30}
+                            />
+                        </TouchableOpacity>}
+                </View>
+            </Card>
+        </View>
+    )
+
+    
+    
+    
 }
 
 class Dish extends Component {
@@ -192,16 +196,17 @@ class Dish extends Component {
         super(props)
         this.state = {
             products : PRODUCTS,
-            
-            // name: this.props.navigation.getParam('name')
         }
     }
-    static navigationOptions = {
-        title: 'Dish'
-};
+    static navigationOptions = ({navigation}) => ({
+        title: `${navigation.getParam('dishName')}`
+       
+});
 
 componentDidMount() {
+    
     this.props.fetchProducts()
+    console.log(this.props.populars.products.errMess)
 
 }   
 addTocart(productId) {
@@ -216,9 +221,10 @@ render() {
         const dishPopularId = this.props.navigation.getParam('dishId')
         const dish = this.props.populars.populars.populars.filter(popular => popular.id === dishPopularId)[0]
         const products = this.props.populars.products.products.filter(product => product.dishId.includes(dishPopularId))
-  
+
         return (
-            <ScrollView>
+           <View >
+            <ScrollView style={{marginBottom: 50}}>
                 
                 <RenderDish dish={dish} key={dish.id} favorite={this.props.populars.favorites.includes(dishPopularId)} markFavorite={() => this.markFavorite(dishPopularId)}/>
                 <RenderDishDetails key={dish.id + 'details'} dish={dish} />
@@ -227,14 +233,27 @@ render() {
                     style={{marginBottom: 50}}   
                 >
                     {products.map(p => {
+                        if(this.props.populars.products.isLoading) {
+                            return <Loading />
+                        }
                         return (
-                            <RenderProduct  product={p} addTocart={() => this.addTocart(p.productId)} removeProductFromCart={() => this.props.removeProductFromCart(p.productId, p.price)} productInCart={this.props.populars.cart.products.includes(p.productId)}/>
+                            <RenderProduct  
+                            product={p} 
+                            addTocart={() => this.addTocart(p.productId)} 
+                            removeProductFromCart={() => this.props.removeProductFromCart(p.productId, p.price)} 
+                            productInCart={this.props.populars.cart.products.includes(p.productId)} 
+                            
+                            />
                         )
                     })}
                 </ScrollView>
                
-                <BottomNavBarComponent  navigation={this.props.navigation}/>
             </ScrollView>
+                <View style={{position: 'absolute', bottom: 0, width: '100%', marginTop: 50, marginBottom: 0}}>
+                    
+                        <BottomNavBarComponent  navigation={this.props.navigation}/>
+                    </View>
+            </View>
         )
     }
 }
@@ -249,7 +268,8 @@ const styles = StyleSheet.create({
     },
     cardCaptions: {
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'flex-start',
+        padding: 2
         
     },
  

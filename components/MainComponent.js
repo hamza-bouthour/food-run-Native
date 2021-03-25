@@ -12,11 +12,20 @@ import Favorites from './FavoritesComponent';
 import Account from './AccountComponent'
 import { fetchPopulars } from '../redux/ActionCreators'
 import { populars } from '../redux/popularDishesReducer';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 // import { NavigationContainer } from '@react-navigation/native';
 // import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-
-
+const mapDispatchToProps = {
+    fetchPopulars
+};
+const mapStateToProps = (populars, account) => {
+    return {
+        account,
+        populars
+    };
+};
 const HomeNavigator = createStackNavigator(
     {
         Dish: { screen: Dish },
@@ -24,33 +33,75 @@ const HomeNavigator = createStackNavigator(
     },
     {
         initialRouteName: 'Home',
-        defaultNavigationOptions: {
-            headerStyle: {
-                backgroundColor: '#039FB6'
-            },
-            headerTintColor: 'white',
-            headerTitleStyle: {
-                color: '#fff'
-            }
+        defaultNavigationOptions: ({navigation}) => {
+            // let asba = props.navigation.state.account.username
+            return ({
+
+                headerTitleAlign: 'left',
+                headerStyle: {
+                    backgroundColor: '#3b4e76', 
+                },
+                headerTintColor: 'white',
+                headerTitleStyle: {
+                
+                    flex:1 
+                },
+                headerLeft:  
+                    <TouchableOpacity 
+                        onPress={() => navigation.navigate('Home')}>
+                        <Image 
+                            style={{width: 80, height: 50, marginTop: 18}}
+                            resizeMode="cover"
+                            source={{ uri: 'https://i.postimg.cc/W1nYqJvk/asba.png'}} 
+                
+                        />
+                    </TouchableOpacity>,
+                headerRight: <Text><Icon
+                name='user-o'
+                size={25}
+                color="#039FB6"
+                style={{marginRight: 10, marginTop: 6}}
+                onPress={() => navigation.navigate('Account')}
+            />  </Text>
+            })
+                
         }
     }
-
 )
 const CartNavigator = createStackNavigator(
     {
         Cart: { screen: Cart }
     },
-    {
-        initialRouteName: 'Cart',
-        defaultNavigationOptions: {
+    {   
+        defaultNavigationOptions: ({navigation}) => ({
+            headerTitleAlign: 'left',
             headerStyle: {
-                backgroundColor: '#039FB6'
+                backgroundColor: '#3b4e76', 
             },
             headerTintColor: 'white',
             headerTitleStyle: {
-                color: '#fff'
-            }
-        }
+            
+                flex:1 
+            },
+            headerLeft:  
+                <TouchableOpacity 
+                    onPress={() => navigation.navigate('Home')}>
+                    <Image 
+                        style={{width: 80, height: 50, marginTop: 18}}
+                        resizeMode="cover"
+                        source={{ uri: 'https://i.postimg.cc/W1nYqJvk/asba.png'}} 
+            
+                    />
+                </TouchableOpacity>,
+            headerRight:  
+                <Icon
+                    name='user-o'
+                    size={25}
+                    color="#039FB6"
+                    style={{marginRight: 10, marginTop: 6}}
+                    onPress={() => navigation.navigate('Account')}
+                />  
+        }) 
     }
 )
 const AccountNavigator = createStackNavigator(
@@ -58,16 +109,35 @@ const AccountNavigator = createStackNavigator(
         Account: { screen: Account}
     },
     {
-        initialRouteName: 'Account',
-        defaultNavigationOptions: {
+        defaultNavigationOptions: ({navigation}) => ({
+            headerTitleAlign: 'left',
             headerStyle: {
-                backgroundColor: '#039FB6'
+                backgroundColor: '#3b4e76', 
             },
             headerTintColor: 'white',
             headerTitleStyle: {
-                color: '#fff'
-            }
-        }
+            
+                flex:1 
+            },
+            headerLeft:  
+                <TouchableOpacity 
+                    onPress={() => navigation.navigate('Home')}>
+                    <Image 
+                        style={{width: 80, height: 50, marginTop: 18}}
+                        resizeMode="cover"
+                        source={{ uri: 'https://i.postimg.cc/W1nYqJvk/asba.png'}} 
+            
+                    />
+                </TouchableOpacity>,
+            headerRight:  
+                <Icon
+                    name='user-o'
+                    size={25}
+                    color="#039FB6"
+                    style={{marginRight: 10, marginTop: 6}}
+                    onPress={() => navigation.navigate('Account')}
+                />  
+        }) 
     }
 )
 const FavoritesNavigator = createStackNavigator(
@@ -75,27 +145,38 @@ const FavoritesNavigator = createStackNavigator(
         Favorites: { screen: Favorites }
     },
     {
-        initialRouteName: 'Favorites',
-        defaultNavigationOptions: {
+        defaultNavigationOptions: ({navigation}) => ({
+            headerTitleAlign: 'left',
             headerStyle: {
-                backgroundColor: '#039FB6'
+                backgroundColor: '#3b4e76', 
             },
             headerTintColor: 'white',
             headerTitleStyle: {
-                color: '#fff'
-            }
-        }
+            
+                flex:1 
+            },
+            headerLeft:  
+                <TouchableOpacity 
+                    onPress={() => navigation.navigate('Home')}>
+                    <Image 
+                        style={{width: 80, height: 50, marginTop: 18}}
+                        resizeMode="cover"
+                        source={{ uri: 'https://i.postimg.cc/W1nYqJvk/asba.png'}} 
+            
+                    />
+                </TouchableOpacity>,
+            headerRight:  
+                <Icon
+                    name='user-o'
+                    size={25}
+                    color="#039FB6"
+                    style={{marginRight: 10, marginTop: 6}}
+                    onPress={() => navigation.navigate('Account')}
+                />  
+        }) 
     }
 )
-const mapDispatchToProps = {
-    fetchPopulars
-};
-const mapStateToProps = populars => {
-    return {
-        
-        populars
-    };
-};
+
 const MainNavigator = createDrawerNavigator(
     {
         Home: { screen: HomeNavigator },
@@ -124,5 +205,34 @@ const AppNavigator = createAppContainer(MainNavigator)
         )
     }
 }
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    drawerHeader: {
+        backgroundColor: '#5637DD',
+        height: 140,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        flexDirection: 'row'
+    },
+    drawerHeaderText: {
+        color: '#fff',
+        fontSize: 24,
+        fontWeight: 'bold'
+    },
+    drawerImage: {
+        margin: 10,
+        height: 60,
+        width: 60
+    },
+    stackIcon: {
+        marginLeft: 10,
+        color: '#fff',
+        fontSize: 24
+    }
+});
+
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
 // export default Main

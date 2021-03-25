@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, FlatList, Modal, Button, StyleSheet, TextInput, Image, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, FlatList, Modal, Button, StyleSheet, TextInput, Image, TouchableOpacity,Share, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { Card, Rating, Input, Tile, ListItem, Avatar } from 'react-native-elements';
 import { fetchProducts } from '../redux/ActionCreators';
@@ -8,9 +8,8 @@ import BottomNavBarComponent from './BottomNavBarComponent';
 import { addProductToCart, removeAllProductsFromCart, removeProductFromCart } from '../redux/ActionCreators';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import SwipeButton from 'rn-swipe-button';
-
-
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { ListView } from 'react-native';
 
 
 const mapDispatchToProps = {
@@ -62,7 +61,7 @@ function RenderCartProducts(props) {
                                         reverse
                                         name='plus-circle'
                                         type='font-awesome'
-                                        color='#039FB6'
+                                        color='#E78200'
                                         size={30}
                                     />
                                 </TouchableOpacity> :
@@ -76,7 +75,7 @@ function RenderCartProducts(props) {
                                         reverse
                                         name='times'
                                         type='font-awesome'
-                                        color='grey'
+                                        color='#E78200'
                                         size={23}
                                     />
                                 </TouchableOpacity>}
@@ -99,19 +98,19 @@ function RenderProductLocal(props) {
             >
                 <Card 
                     key={product.productId}
-                    // wrapperStyle={styles.productsContainerView} 
-                    containerStyle={{borderColor: props.checked? 'yellow': 'green',padding: 30,
+                   
+                    containerStyle={{borderColor: props.checked? '#E78200': '#3b4e76',padding: 0,
                     borderRadius: 10, marginBottom: -10, opacity: props.checked? 0.2: 1.5}}  
                     title={product.name} 
                 >
                     <Image 
                         source={{uri: product.img}} 
                         
-                        style={{width: 300, height: 250}}
+                        style={{width: 100, height: 100,marginHorizontal: 128}}
                         resizeMode={'cover'}
                         />
                     <View>
-                        <Text style={{marginHorizontal: 120, marginTop: 10, color: 'green', fontSize: 20}}>
+                        <Text style={{marginHorizontal: 155, marginTop: 10, color: 'green', fontSize: 13}}>
                             CHECK
                         </Text> 
                         
@@ -121,6 +120,16 @@ function RenderProductLocal(props) {
         )
     }
 }
+const shareCampsite = (title, message) => {
+    Share.share({
+        title: title,
+        message: `${title}: ${message}`,
+      
+    },{
+        dialogTitle: 'Share ' + title
+    });
+};
+const numColumns = 2;
 class Cart extends Component {
     constructor(props) {
         super(props)
@@ -131,7 +140,7 @@ class Cart extends Component {
         }
     }
     static navigationOptions = {
-        title: 'Cart'
+        title: 'Your list'
 };
 // componentDidMount() {
 
@@ -161,15 +170,15 @@ toggleModal() {
                     color="#039FB6"
                     onPress={() => this.props.navigation.navigate('Home')}
                     />
+                    
                 </View>
             )
         } else
         return (
-            <View style={{padding: 10}}>
-                <Text>Your list</Text>
+            <View style={{flex: 1}}>
                 <ScrollView
                 
-                style={{marginBottom: 50}}   
+                style={{marginBottom: 100}}   
             >
                 {productsCart.map(p => {
                     return (
@@ -182,7 +191,7 @@ toggleModal() {
                               this.props.removeAllProductsFromCart() 
                             }
                         >
-                            <Text style={{fontSize: 16, marginRight:20}}>remove all <Icon name="trash" color="darkgreen" size={15}/></Text>
+                            <Text style={{fontSize: 16, marginRight:20}}>remove all <Icon name="trash" color="#E78200" size={15}/></Text>
                         </TouchableOpacity>
                         <Text style={{fontSize: 16, marginLeft: 30}}> Total: {this.props.populars.cart.total}<Icon name="dollar" color="darkgreen" size={15}/></Text>
                     </View> 
@@ -190,46 +199,80 @@ toggleModal() {
                         <TouchableOpacity style={{marginTop: 20}}
                             onPress={() => this.toggleModal()}
                         >
-                            <Text>Try local shopping view! <Icon name="mobile" color="darkgreen" size={25}/></Text>
+                            <View style={{ flexDirection: 'row',
+                            justifyContent: 'flex-start',}}>
+                                <Text>Start local shopping</Text>  
+                                <Icon 
+                                    name="mobile" 
+                                    color="#E78200" 
+                                    size={25}
+                                    style={{marginLeft: 8}}
+                                    />
+                            </View>
+                            
+                            
+                            
                             <Modal
                                 visible={this.state.showModal}
                                 onRequestClose={() => this.toggleModal()}
                                 transparent={false}
                                 animationType={'slide'}
                                 fullscreen
+                                
                             >
-                                <View style={{backgroundColor: 'black', flex: 1, marginBottom: 20}}>
-                                    <ScrollView
-                                        
-                                    >   
-                                    
-                                    {productsCart.map(p => {
-                                        return (
-                                            <RenderProductLocal product={p} checked={this.state.productsChecked.includes(p.productId)} addToChecked={() => this.addToChecked(p.productId)}/>
-                                        )
-                                    })}
-                                 
-                                    </ScrollView>
-                                    <SwipeButton 
-                                    title={<Icon name="long-arrow-right" color="#039FB6" size={45}/>}
-                                    color="white"
-                                    railFillBackgroundColor="#039FB6" //(Optional)
-                                    railFillBorderColor="white" //(Optional)
-                                    thumbIconBackgroundColor="#039FB6" //(Optional)
-                                    thumbIconBorderColor="white" //(Optional)
-                                    railBackgroundColor="white" //(Optional)
-                                    railBorderColor="#bbeaff" //(Optional)
-                                    onSwipeSuccess={() => {
-                                        this.toggleModal();
-                                      }}
-                                />
-                                </View>
+                            
+                               
+                            
+                            <ScrollView
+                                
+                            >   
+                            <View style={{backgroundColor: 'white', flex: 1, marginBottom: 20}}>
+                            {productsCart.map(p => {
+                                return (
+                                    <RenderProductLocal product={p} checked={this.state.productsChecked.includes(p.productId)} addToChecked={() => this.addToChecked(p.productId)}/>
+                                )
+                            })}
+                         
+                            <SwipeButton 
+                            containerStyles={{marginTop: 50}}
+                            title={<Icon name="long-arrow-right" color="#039FB6" size={45}/>}
+                            // railFillBackgroundColor="#E78200" //(Optional)
+                            // railFillBorderColor="#E78200" //(Optional)
+                            thumbIconBackgroundColor="#039FB6" //(Optional)
+                            thumbIconBorderColor="#039FB6" //(Optional)
+                            railBackgroundColor="#3b4e76" //(Optional)
+                            railBorderColor="#039FB6" //(Optional)
+                            onSwipeSuccess={() => {
+                                this.toggleModal();
+                              }}
+                        />
+                            </View>
+                            </ScrollView>
+                        
                                     
                             </Modal>
                         </TouchableOpacity>
+                        <TouchableOpacity
+                            style={{ flexDirection: 'row', justifyContent: 'flex-start'}}
+                            onPress={() => shareCampsite('hello', 'share here')} >
+                            <Text>Share list </Text>
+                            <Icon
+                                name={'share-alt'}
+                                type='font-awesome'
+                                color='#E78200'
+                                size={18}
+                                
+                            />
+                        </TouchableOpacity>
                     </View>
-                </ScrollView>
-                
+                    </ScrollView>
+                    
+                    <View style={{position: 'absolute', bottom: 0, width: '100%', marginTop: 50}}>
+                    
+                        <BottomNavBarComponent  navigation={this.props.navigation}/>
+                    </View>
+               
+              
             </View>
         )
     }
@@ -243,6 +286,10 @@ const styles = StyleSheet.create({
       
      
     },
+    container: {
+        flex: 1,
+        marginVertical: 20,
+      },
     productsContainerView: {
         padding: 0,
         // flexDirection: 'row',
@@ -251,6 +298,27 @@ const styles = StyleSheet.create({
       
      
     },
+    bottomView: {
+        width: '100%',
+        height: 50,
+        backgroundColor: '#EE5407',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 0,
+      },
+    parent: {
+        flex: 1,
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+    },
+    item: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        margin: 1,
+        height: Dimensions.get('window').width / numColumns, // approximate a square
+      },
     avatar: {
         width: 50,
         height:50,
@@ -283,3 +351,4 @@ export default connect(mapStateToProps, mapDispatchToProps)(Cart);
 //                                        <Text>swipte</Text>
 //                                     </View>
 //                                 </SwipeRow>
+

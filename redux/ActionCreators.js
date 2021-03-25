@@ -26,10 +26,9 @@ export const addPopulars = populars => ({
 
 // PRODUCTS ACTIONS
 export const fetchProducts = () => dispatch => {
-    dispatch(productsLoading())
-    setTimeout(() => {
+    
         dispatch(addProducts(PRODUCTS))
-    }, 1000);
+    
 }
 export const productsLoading = () => ({
     type: ActionTypes.PRODUCTS_LOADING
@@ -75,4 +74,13 @@ export const removeAllProductsFromCart = () => ({
 export const markFavorite = (dishPopularId) => ({
     type: ActionTypes.MARK_FAVORITE,
     payload: dishPopularId
+})
+
+export const addAccount = (userName, email, password) => ({
+    type: ActionTypes.ADD_ACCOUNT,
+    payload: {
+        userName,
+        email,
+        password
+    }
 })

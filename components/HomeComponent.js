@@ -21,10 +21,11 @@ const mapDispatchToProps = {
     fetchPopulars,
     fetchProducts
 };
-const mapStateToProps = populars => {
+const mapStateToProps = (populars,account) => {
     return {
         
-        populars
+        populars,
+        account
     };
 };
 
@@ -32,11 +33,12 @@ const mapStateToProps = populars => {
  class Home extends Component {
 
 static navigationOptions = {
-        title: 'Home'
+        title: 'Home',
+        
 };
   componentDidMount() {
         this.props.fetchPopulars();
-        this.props.fetchProducts()
+       
         // console.log(this.state.populars)
         
     }
@@ -50,7 +52,7 @@ static navigationOptions = {
                     // onPress={() => navigate('CampsiteInfo', { campsiteId: item.id })}
                     imageSrc={{uri: item.img}}
                     caption='some caption'
-                    onPress={()=> navigate('Dish', { dishId: item.id })}
+                    onPress={()=> navigate('Dish', { dishId: item.id, dishName: item.name })}
                     
                 >
                 <View

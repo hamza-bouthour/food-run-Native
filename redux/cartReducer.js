@@ -13,11 +13,11 @@ export const cart = (state = {products:[], dishes:[], total: 0}, action) => {
         case ActionTypes.ADD_PRODUCT_TO_CART:
             return {...state, products: state.products.concat(action.payload)};
         case ActionTypes.REMOVE_PRODUCT_FROM_CART:
-            return {...state, products: removeItem(state.products, action.payload.productId), total: +state.total.toFixed(2) - +action.payload.price.toFixed(2)};
+            return {...state, products: removeItem(state.products, action.payload.productId), total: Math.round(state.total - action.payload.price)};
         case ActionTypes.REMOVE_ALL_PRODUCTS_FROM_CART: 
-            return {...state, products: [], total: 0};
+            return {...state, products: [], total: 0.00};
         case ActionTypes.ADD_PRODUCT_COST_TO_TOTAL:
-            return {...state, total: +state.total.toFixed(2) + +action.payload.toFixed(2)}  
+            return {...state, total: Math.round(state.total + action.payload)}  
         default:
             return state
     }

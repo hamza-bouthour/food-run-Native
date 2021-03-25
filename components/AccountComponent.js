@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, FlatList, Modal, Button, StyleSheet, TextInput } from 'react-native';
+import { Text, View, ScrollView, FlatList, Modal, Button, StyleSheet, TextInput, Linking, TouchableOpacity } from 'react-native';
 import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
-import { fetchProducts } from '../redux/ActionCreators';
+import { addAccount } from '../redux/ActionCreators';
+import { Link } from '@react-navigation/native';
+
 
 
 const mapDispatchToProps = {
-    fetchProducts
+    addAccount
 };
 const mapStateToProps = (populars, products, account) => {
     return {
@@ -15,6 +17,24 @@ const mapStateToProps = (populars, products, account) => {
         account
     };
 };
+const links = [
+    {name: 'Linked-In', url:'https://www.linkedin.com/in/hamza-bouthour-a0265919b/'},
+    {name: 'Github', url: 'https://github.com/hamza-bouthour'}
+]
+const ExternalLink = (props) => {
+    const { url, children, style = {}  } = props;
+    
+    const onPress = () => Linking.canOpenURL(url).then(() => {
+        Linking.openURL(url);
+    });
+
+    return (
+        <TouchableOpacity onPress={onPress}>
+            <Text style={[styles.text, style]}>{children}</Text>
+        </TouchableOpacity>
+    );
+};
+
 
  class Account extends Component {
      constructor(props) {
@@ -28,11 +48,11 @@ const mapStateToProps = (populars, products, account) => {
     static navigationOptions = {
         title: 'Account'
 };
-// componentDidMount() {
-//     this.props.fetchProducts();
-// }
+handleAccount() {
+    this.props.addAccount(this.state.username, this.state.email, this.state.password)
+}
     render() {
-        if (!this.props.account) {
+        if (!this.props.populars.account.username) {
             return (
                 <View style={styles.form}>
                     <Input 
@@ -54,10 +74,10 @@ const mapStateToProps = (populars, products, account) => {
                                 <Button 
                                     title='Sign-up'
                                     color='#5637DD'
-                                    // onPress={ () => {
-                                    //     this.handleComment(campsiteId);
-                                    //     this.resetForm();
-                                    // }}
+                                    onPress={ () => {
+                                        this.handleAccount();
+                                        
+                                    }}
                                 />
                     </View>
                 </View>
@@ -65,28 +85,29 @@ const mapStateToProps = (populars, products, account) => {
             )
         }
         else {
-            <View style={styles.form}>
-                    <Input 
-                        placeholder='username'
-                        onChangeText={values => this.setState({username: values})}
-                        value={this.state.username}
-                    />
-                    <Input 
-                        placeholder='password'
-                        onChangeText={values => this.setState({password: values})}
-                        value={this.state.password}
-                    />
-                    <View style={{marginHorizontal: 10}}>
-                                <Button 
-                                    title='Sign-in'
-                                    color='#5637DD'
-                                    // onPress={ () => {
-                                    //     this.handleComment(campsiteId);
-                                    //     this.resetForm();
-                                    // }}
-                                />
+            return (
+                    <View style={styles.profile}>
+                        <Text>Hello, <Text style={{fontSize: 20}}>{this.props.populars.account.username}!</Text></Text>
+                        <View style={styles.text}>
+                            <Text>Thanks for checking Food-Run,</Text>
+                            <Text>Please look up my:</Text>
+                        </View>
+                        <View style={styles.links}>
+                        {links.map(x => {
+                            return (
+                                <ExternalLink url={x.url}>
+                                    {x.name}
+                                </ExternalLink>
+                            )
+                        }
+                             
+
+                            
+                            )}
+                        </View>
+                        
                     </View>
-                </View>
+            )
         }
     }
 }
@@ -94,6 +115,19 @@ const styles = StyleSheet.create({
     form: {
         padding: 20,
         marginTop: 20
+    },
+    profile: {
+        padding: 20,
+        marginTop: 30
+    },
+    text: {
+        padding: 20,
+        marginTop: 10
+    },
+    links: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        marginTop: -20
     }
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Account);

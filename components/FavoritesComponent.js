@@ -32,7 +32,7 @@ const mapStateToProps = populars => {
  class Favorites extends Component {
 
 static navigationOptions = {
-        title: 'Home'
+        title: 'Favorites'
 };
   componentDidMount() {
         this.props.fetchPopulars();
