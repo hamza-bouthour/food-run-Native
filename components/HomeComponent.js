@@ -51,17 +51,22 @@ static navigationOptions = {
                     title={item.name}
                     // onPress={() => navigate('CampsiteInfo', { campsiteId: item.id })}
                     imageSrc={{uri: item.img}}
-                    caption='some caption'
+           
                     onPress={()=> navigate('Dish', { dishId: item.id, dishName: item.name })}
+                    titleStyle={{color: '#3b4e76'}}
+                    containerStyle={{height: 450}}
                     
                 >
                 <View
                     style={styles.cardCaptions}
                 >   
                     
-                    <Text style={{marginRight: 10}}>Cost: {item.cost} <Icon name="clock-o" color="darkgreen" size={15}/></Text>
+                    <Text style={{marginRight: 10}}>Cost: {item.cost} <Icon name="clock-o" color="#E78200" size={15}/></Text>
                     <Text style={{marginLeft: 5}}>Time: {item.time} <Icon name="dollar" color="darkgreen" size={15}/></Text>
                    
+                </View>
+                <View style={{marginBottom: 20}}>
+                    <Text>{item.description}</Text>
                 </View>
                 </Tile>
             );
@@ -95,7 +100,9 @@ static navigationOptions = {
 const styles= StyleSheet.create({
     cardCaptions: {
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
+        marginBottom: 5,
+        
     
         
     },

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, FlatList, Modal, StyleSheet, TextInput, ImageBackground, Alert, Image } from 'react-native';
+import { Text, View, ScrollView, FlatList, Modal, StyleSheet, TextInput, ImageBackground, Easing, Alert, Image, Animated, PanResponder,TouchableWithoutFeedback  } from 'react-native';
 import { Card, Rating, Input, Tile, Button } from 'react-native-elements';
 import { fetchProducts } from '../redux/ActionCreators';
 import { connect } from 'react-redux';
@@ -7,19 +7,26 @@ import { PRODUCTS } from '../shared/products';
 import { addProductToCart } from '../redux/ActionCreators';
 import { removeProductFromCart } from '../redux/ActionCreators'
 import { addProductToTotal } from '../redux/ActionCreators';
-import { markFavorite } from '../redux/ActionCreators';
+import { markFavorite, addDishToCart, addProductToFavorite } from '../redux/ActionCreators';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import BottomNavBarComponent from './BottomNavBarComponent';
 import Loading from './LoadingComponent';
+// import { SwipeUpDown } from 'react-native-swipe-up-down';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+import * as Animatable from 'react-native-animatable';
+import * as Notifications from 'expo-notifications';
+
 
 const mapDispatchToProps = {
     fetchProducts,
     addProductToCart,
     addProductToTotal,
     markFavorite,
-    removeProductFromCart
+    removeProductFromCart, 
+    addDishToCart,
+     addProductToFavorite
 };
 const mapStateToProps = (populars, products, cart, favorites) => {
     return {
@@ -32,10 +39,10 @@ const mapStateToProps = (populars, products, cart, favorites) => {
 
 function RenderDish(props) {
     const {dish} = props
-    if (dish) {
+   
         return (
             <SwipeRow leftOpenValue={100} style={styles.swipeRow}>
-            <View>
+            <View >
                 <TouchableOpacity
                     style={styles.deleteTouchable }
                     onPress={() =>
@@ -61,9 +68,9 @@ function RenderDish(props) {
                             
                     
                     <Icon
-                    name={props.favorite ? "thumbs-up": "thumbs-o-up"}
+                    name={props.favorite ? "star": "star-o"}
                     size={35}
-                    color="#039FB6"
+                    color="#E78200"
                     style={styles.likeIcon}
                     />
                 </TouchableOpacity>
@@ -72,7 +79,7 @@ function RenderDish(props) {
                 <Card
                     containerStyle={{borderColor: '#fff', borderRadius: 5, padding: 0}}
                     
-                    imageSrc={{uri: dish.img}}
+                    
                     featured={true}
                     activeOpacity={1.5}
                 >   
@@ -93,13 +100,13 @@ function RenderDish(props) {
             </View>
          </SwipeRow>
         )
-    }
+    
 }
 function RenderDishDetails(props) {
     const {dish} = props
     if (dish) {
         return (
-            <View style={ {padding: 13, marginBottom: 5}} key={dish.id}>
+            <View style={ {padding: 13, marginBottom: 5}} key={dish.name}>
                 <Text style={{marginBottom: 20}}>{dish.description}</Text>
                 {dish.directions.map((dir, i) => {
                     return (
@@ -110,38 +117,49 @@ function RenderDishDetails(props) {
         )
     }
 }
-function RenderNavCart(props) {
-    return (
-        <View style={styles.productsNav}>
-            <Icon    
-                raised
-                type='font-awesome'
-                reverse
-                name="home"
-                size={35}
-                color="#039FB6"
-                onPress={() => props.navigation.navigate('Home')}
-                />
-            <Icon 
-                raised
-                type='font-awesome'
-                reverse
-                name="shopping-cart"
-                size={35}
-                color="#039FB6"
-                onPress={() => props.navigation.navigate('Cart')}
-                ><Text>{props.productsNumber}</Text></Icon>
-                <Text style={{marginLeft: 5}}>{props.total}<Icon name="dollar" color="darkgreen" size={15}/></Text>  
-        </View>
-    )
-}
+// function RenderNavCart(props) {
+//     return (
+//         <View style={styles.productsNav}>
+//             <Icon    
+//                 raised
+//                 type='font-awesome'
+//                 reverse
+//                 name="home"
+//                 size={35}
+//                 color="#039FB6"
+//                 onPress={() => props.navigation.navigate('Home')}
+//                 />
+//             <Icon 
+//                 raised
+//                 type='font-awesome'
+//                 reverse
+//                 name="shopping-cart"
+//                 size={35}
+//                 color="#039FB6"
+//                 onPress={() => props.navigation.navigate('Cart')}
+//                 ><Text>{props.productsNumber}</Text></Icon>
+//                 <Text style={{marginLeft: 5}}>{props.total}<Icon name="dollar" color="darkgreen" size={15}/></Text>  
+//         </View>
+//     )
+// }
 function RenderProduct(props) {
     const {product} = props
 
     return (
+        
+    
+        
+        
+        <TouchableWithoutFeedback
+            onPressIn={() => props.onFocusFunction()}
+            onLongPress={()=> {props.addProductToFavorite(),
+            props.sendNotif(product.name)}}
+            onPressOut={() => props.onPressOutFunction()}
+        >
+
         <View key={product.productId}> 
             <Card
-                containerStyle={{borderColor: props.productInCart? 'green' : 'yellowgreen',borderRadius: 15}}
+                containerStyle={{borderColor: props.productInCart? 'green'  : props.productInFavorite? 'pink': props.color ,borderRadius: 15,borderWidth: props.productInFavorite? 3: 1 }}
                 
                 title={product.name}         
             >
@@ -155,6 +173,7 @@ function RenderProduct(props) {
                     {!props.productInCart ?
                         <TouchableOpacity
                             style={styles.productBtn}
+                        
                             onPress={()=> {
                                 props.addTocart()
                             }}
@@ -182,8 +201,13 @@ function RenderProduct(props) {
                             />
                         </TouchableOpacity>}
                 </View>
+     
             </Card>
+            
         </View>
+        </TouchableWithoutFeedback>
+
+
     )
 
     
@@ -196,6 +220,7 @@ class Dish extends Component {
         super(props)
         this.state = {
             products : PRODUCTS,
+            onFocus: false
         }
     }
     static navigationOptions = ({navigation}) => ({
@@ -204,11 +229,18 @@ class Dish extends Component {
 });
 
 componentDidMount() {
-    
+    const dishPopularId = this.props.navigation.getParam('dishId')
+    this.props.addDishToCart(dishPopularId);
     this.props.fetchProducts()
     console.log(this.props.populars.products.errMess)
 
-}   
+}  
+onFocus() {
+    this.setState({onFocus: true})
+} 
+onPressOut() {
+    this.setState({onFocus: false})
+}
 addTocart(productId) {
     this.props.addProductToCart(productId);
     this.props.addProductToTotal(this.state.products.filter(x=> x.productId === productId)[0].price)
@@ -216,8 +248,34 @@ addTocart(productId) {
 markFavorite(dishId) {
     this.props.markFavorite(dishId)
 }
+async presentLocalNotification(product) {
+    function sendNotification() {
+        Notifications.setNotificationHandler({
+            handleNotification: async () => ({
+                shouldShowAlert: true
+            })
+        });
+
+        Notifications.scheduleNotificationAsync({
+            content: {
+                title: 'Your favorite products list',
+                body: `${product} has been added to your favorites list`
+            },
+            trigger: null
+        });
+    }
+
+    let permissions = await Notifications.getPermissionsAsync();
+    if (!permissions.granted) {
+        permissions = await Notifications.requestPermissionsAsync();
+    }
+    if (permissions.granted) {
+        sendNotification();
+    }
+}
+
 render() {
-        
+
         const dishPopularId = this.props.navigation.getParam('dishId')
         const dish = this.props.populars.populars.populars.filter(popular => popular.id === dishPopularId)[0]
         const products = this.props.populars.products.products.filter(product => product.dishId.includes(dishPopularId))
@@ -226,23 +284,29 @@ render() {
            <View >
             <ScrollView style={{marginBottom: 50}}>
                 
-                <RenderDish dish={dish} key={dish.id} favorite={this.props.populars.favorites.includes(dishPopularId)} markFavorite={() => this.markFavorite(dishPopularId)}/>
-                <RenderDishDetails key={dish.id + 'details'} dish={dish} />
+                <RenderDish dish={dish} favorite={this.props.populars.favorites.includes(dishPopularId)} markFavorite={() => this.markFavorite(dishPopularId)}/>
+                <RenderDishDetails  dish={dish} />
                 <ScrollView
                     horizontal={true}
                     style={{marginBottom: 50}}   
                 >
-                    {products.map(p => {
+                    {products.map((p, i) => {
                         if(this.props.populars.products.isLoading) {
-                            return <Loading />
+                            return <Loading key={i}/>
                         }
                         return (
-                            <RenderProduct  
+                            <RenderProduct 
+                             
                             product={p} 
                             addTocart={() => this.addTocart(p.productId)} 
                             removeProductFromCart={() => this.props.removeProductFromCart(p.productId, p.price)} 
                             productInCart={this.props.populars.cart.products.includes(p.productId)} 
-                            
+                            productInFavorite={this.props.populars.favoriteProducts.includes(p.productId)}
+                            addProductToFavorite={() => this.props.addProductToFavorite(p.productId)}
+                            onFocus={this.state.onFocus}
+                            onFocusFunction={() => this.onFocus()}
+                            onPressOutFunction={() => this.onPressOut()}
+                            sendNotif={() => this.presentLocalNotification(p.name)}
                             />
                         )
                     })}
@@ -250,9 +314,10 @@ render() {
                
             </ScrollView>
                 <View style={{position: 'absolute', bottom: 0, width: '100%', marginTop: 50, marginBottom: 0}}>
-                    
+ 
                         <BottomNavBarComponent  navigation={this.props.navigation}/>
                     </View>
+              
             </View>
         )
     }
@@ -320,5 +385,19 @@ const styles = StyleSheet.create({
 export default connect(mapStateToProps, mapDispatchToProps)(Dish);
 // <RenderNavCart navigation={this.props.navigation} productsNumber={this.props.populars.cart.products.length} total={this.props.populars.cart.total}/>
 
+
+// <View>
+// <TouchableOpacity
+//     onPress={()=> props.addProductToFavorite()}
+// >
+// <Icon
+//     reverse
+//     name='heart'
+//     type='font-awesome'
+//     color='red'
+//     size={30}
+// />
+// </TouchableOpacity>
+// </View>
 
 

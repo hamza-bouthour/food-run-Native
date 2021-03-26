@@ -4,6 +4,7 @@ import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { addAccount } from '../redux/ActionCreators';
 import { Link } from '@react-navigation/native';
+import BottomNavBarComponent from './BottomNavBarComponent'
 
 
 
@@ -73,13 +74,17 @@ handleAccount() {
                     <View style={{marginHorizontal: 10}}>
                                 <Button 
                                     title='Sign-up'
-                                    color='#5637DD'
+                                    color='#3b4e76'
                                     onPress={ () => {
                                         this.handleAccount();
                                         
                                     }}
                                 />
                     </View>
+                    <View style={{position: 'absolute', bottom: 0, width: '100%', marginTop: 50, marginBottom: 0}}>
+ 
+                    <BottomNavBarComponent  navigation={this.props.navigation}/>
+                </View>
                 </View>
         
             )
@@ -87,25 +92,31 @@ handleAccount() {
         else {
             return (
                     <View style={styles.profile}>
-                        <Text>Hello, <Text style={{fontSize: 20}}>{this.props.populars.account.username}!</Text></Text>
-                        <View style={styles.text}>
-                            <Text>Thanks for checking Food-Run,</Text>
-                            <Text>Please look up my:</Text>
-                        </View>
-                        <View style={styles.links}>
-                        {links.map(x => {
-                            return (
-                                <ExternalLink url={x.url}>
-                                    {x.name}
-                                </ExternalLink>
-                            )
-                        }
-                             
-
+                        <ScrollView style={{padding: 20}}>
                             
-                            )}
+                            <Text>Hello, <Text style={{fontSize: 20}}>{this.props.populars.account.username}!</Text></Text>
+                            <View style={styles.text}>
+                                <Text>Thanks for checking Food-Run,</Text>
+                                <Text>Please look up my:</Text>
+                            </View>
+                            <View style={styles.links}>
+                            {links.map(x => {
+                                return (
+                                    <ExternalLink url={x.url}>
+                                        {x.name}
+                                    </ExternalLink>
+                                )
+                            }
+                                
+
+                                
+                                )}
+                            </View>
+                            </ScrollView>
+                        <View style={{position: 'absolute', bottom: 0, width: '100%', margin: 0, marginBottom: 0}}>
+ 
+                        <BottomNavBarComponent  navigation={this.props.navigation}/>
                         </View>
-                        
                     </View>
             )
         }
@@ -114,11 +125,13 @@ handleAccount() {
 const styles = StyleSheet.create({
     form: {
         padding: 20,
-        marginTop: 20
+        marginTop: 20,
+        flex: 1
     },
     profile: {
-        padding: 20,
-        marginTop: 30
+        
+        marginTop: 30,
+        flex: 1
     },
     text: {
         padding: 20,

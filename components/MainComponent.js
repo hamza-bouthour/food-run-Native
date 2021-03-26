@@ -9,7 +9,8 @@ import  Home  from './HomeComponent'
 import Dish from './DishComponent';
 import Cart from './CartComponent';
 import Favorites from './FavoritesComponent';
-import Account from './AccountComponent'
+import Account from './AccountComponent';
+import FavoriteProducts from './FavoriteProductsComponent'
 import { fetchPopulars } from '../redux/ActionCreators'
 import { populars } from '../redux/popularDishesReducer';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -57,7 +58,7 @@ const HomeNavigator = createStackNavigator(
                         />
                     </TouchableOpacity>,
                 headerRight: <Text><Icon
-                name='user-o'
+                name={'user-o'}
                 size={25}
                 color="#039FB6"
                 style={{marginRight: 10, marginTop: 6}}
@@ -142,7 +143,7 @@ const AccountNavigator = createStackNavigator(
 )
 const FavoritesNavigator = createStackNavigator(
     {
-        Favorites: { screen: Favorites }
+        'My Dishes': { screen: Favorites }
     },
     {
         defaultNavigationOptions: ({navigation}) => ({
@@ -176,17 +177,90 @@ const FavoritesNavigator = createStackNavigator(
         }) 
     }
 )
-
+const FavoriteProductsNavigator = createStackNavigator(
+    {
+        'My products': { screen: FavoriteProducts }
+    },
+    {
+        defaultNavigationOptions: ({navigation}) => ({
+            headerTitleAlign: 'left',
+            headerStyle: {
+                backgroundColor: '#3b4e76', 
+            },
+            headerTintColor: 'white',
+            headerTitleStyle: {
+            
+                flex:1 
+            },
+            headerLeft:  
+                <TouchableOpacity 
+                    onPress={() => navigation.navigate('Home')}>
+                    <Image 
+                        style={{width: 80, height: 50, marginTop: 18}}
+                        resizeMode="cover"
+                        source={{ uri: 'https://i.postimg.cc/W1nYqJvk/asba.png'}} 
+            
+                    />
+                </TouchableOpacity>,
+            headerRight:  
+                <Icon
+                    name='user-o'
+                    size={25}
+                    color="#039FB6"
+                    style={{marginRight: 10, marginTop: 6}}
+                    onPress={() => navigation.navigate('Account')}
+                />  
+        }) 
+    }
+)
+const CustomDrawerContentComponent = props => (
+    <ScrollView>
+        <SafeAreaView 
+            style={styles.container}
+            forceInset={{top: 'always', horizontal: 'never'}}
+        >
+            <View style={styles.drawerHeader}>
+                <View style={{flex: 1}}>
+                    <Image 
+                    source={{ uri: 'https://i.postimg.cc/W1nYqJvk/asba.png'}} 
+                        style={styles.drawerImage}
+                    />
+                </View>
+                <View style={{flex: 2}}>
+                    <Text style={styles.drawerHeaderText}>Food-RUN</Text>
+                </View>
+            </View>
+            <DrawerItems {...props} />
+        </SafeAreaView>
+    </ScrollView>
+);
 const MainNavigator = createDrawerNavigator(
     {
         Home: { screen: HomeNavigator },
         Account: { screen: AccountNavigator},
         Cart: { screen: CartNavigator },
-        Favorites: { screen: FavoritesNavigator }
+        'My dishes': { screen: FavoritesNavigator },
+        'My products': { screen: FavoriteProductsNavigator }
+    },
+    {
+        initialRouteName: 'Home',
+        drawerBackgroundColor: '#3b4e76',
+        contentOptions: {
+            labelStyle: {
+             
+              color: 'white',
+            },
+          },
+        contentComponent: CustomDrawerContentComponent
+        
     }
 )
 const AppNavigator = createAppContainer(MainNavigator)
+
  class Main extends Component {
+     constructor(props) {
+         super(props)
+ }
 
     render() {
         return (
@@ -210,7 +284,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     drawerHeader: {
-        backgroundColor: '#5637DD',
+ 
+        backgroundColor: '#3b4e76',
         height: 140,
         alignItems: 'center',
         justifyContent: 'center',
@@ -223,9 +298,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     drawerImage: {
-        margin: 10,
-        height: 60,
-        width: 60
+     
+        height: 130,
+        width: 130
     },
     stackIcon: {
         marginLeft: 10,

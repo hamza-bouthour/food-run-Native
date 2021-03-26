@@ -75,12 +75,26 @@ export const markFavorite = (dishPopularId) => ({
     type: ActionTypes.MARK_FAVORITE,
     payload: dishPopularId
 })
+export const unMarkFavorite = (dishPopularId) => ({
+    type: ActionTypes.UNMARK_FAVORITE,
+    payload: dishPopularId
+})
 
-export const addAccount = (userName, email, password) => ({
+export const addDishToCart = (dishId) => ({
+    type: ActionTypes.ADD_DISH_TO_CART,
+    payload: dishId
+})
+
+export const addAccount = (userName, email, password, subscribed) => ({
     type: ActionTypes.ADD_ACCOUNT,
     payload: {
         userName,
         email,
-        password
+        password,
+        subscribed
     }
+})
+export const addProductToFavorite = (productId) => ({
+    type: ActionTypes.ADD_PRODUCT_TO_FAVORITE,
+    payload: productId
 })

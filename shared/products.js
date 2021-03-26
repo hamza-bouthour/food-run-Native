@@ -34,7 +34,7 @@ export const PRODUCTS = [
     { img: 'https://i.postimg.cc/Jtw4Pm4j/mustard.jpg', price: 1.97,name: "Mustard", productId: 7, dishId: [2, 7]},
     { img: 'https://i.postimg.cc/xjBKWzX3/butter.jpg', price: 3.42,name: "Butter", productId: 8, dishId: [2]},
     { img: 'https://i.postimg.cc/PxgmZjR7/eggs.jpg',price: 3.67, name: "Organic eggs", productId: 9, dishId: [3]},
-    { img: 'https://i.postimg.cc/tC283v95/rosemary.png',price: 0.99, name: "Rosemary", productId: 10, dishId: [3, 4, 5, 6, 7]},
+    { img: 'https://i.postimg.cc/tC283v95/rosemary.png',price: 1.60, name: "Rosemary", productId: 10, dishId: [3, 4, 5, 6, 7]},
     { img: 'https://i.postimg.cc/pXfz43mf/lemon.jpg', price: 3.20, name: "Lemon", productId: 11, dishId: [2, 3, 4, 5, 6, 7, 8]},
     { img: 'https://i.postimg.cc/jdJFGqTD/garlic.png', price: 2.65, name: "Garlic", productId: 12, dishId: [2, 3, 4]},
     { img: 'https://i.postimg.cc/prkzSFdw/spaghetti.jpg',price: 1.67, name: "Spaghetti", productId: 13, dishId: [3]},

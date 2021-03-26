@@ -15,6 +15,8 @@ export const favorites = (state=[], action) => {
                 return state;
             }
             return state.concat(action.payload);
+        case ActionTypes.UNMARK_FAVORITE:
+            return state.filter(s=> s !== action.payload)    
         default:
             return state    
     }
