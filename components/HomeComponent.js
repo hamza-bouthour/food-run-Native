@@ -111,3 +111,6 @@ const styles= StyleSheet.create({
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
 // export default Home
+
+
+const favoritesDishes = this.props.populars.populars.populars.filter(d => this.props.populars.favorites.includes(d.id))
