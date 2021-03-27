@@ -76,7 +76,7 @@ function RenderDish(props) {
                         activeOpacity={1.5}
                     >   
                         <Image 
-                            style={{width: 362, height: 250,borderColor: '#039FB6', marginBottom: 2}}
+                            style={{width: null,flex: 1, height: 250,borderColor: '#039FB6', marginBottom: 2}}
                             resizeMode="cover"
                             source={{ uri: dish.img }}
                             resizeMode={'cover'}
