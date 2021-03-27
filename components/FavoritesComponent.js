@@ -63,10 +63,11 @@ const RenderDirectoryItem = (props) => {
                 </View>
                 <View>
                     <Card
-                        containerStyle={{borderColor: '#fff', borderRadius: 5, padding: 0}}
+                        containerStyle={{borderColor: '#fff', borderRadius: 5, padding: 0, marginBottom: 20}}
                         imageSrc={{uri: item.img}}
                         featured={true}
                         activeOpacity={1.5}
+                        title={item.name}
                     >   
                         <Image 
                             style={{width: 362, height: 250,borderColor: '#039FB6', marginBottom: 2}}
@@ -76,8 +77,8 @@ const RenderDirectoryItem = (props) => {
                         <View 
                             style={styles.cardCaptions}
                         >
-                            <Text style={{marginRight: 10, color: '#3b4e76', fontSize: 15}}>Cost: {item.cost} <Icon name="clock-o" color="#E78200" size={15}/></Text>
-                            <Text style={{marginLeft: 5, color: '#3b4e76', fontSize: 15}}>Time: {item.time} <Icon name="dollar" color="#E78200" size={15}/></Text>
+                            <Text style={{marginRight: 10, color: '#3b4e76', fontSize: 15}}>Cost: {item.cost} <Icon name="dollar" color="#039FB6" size={15}/></Text>
+                            <Text style={{marginLeft: 5, color: '#3b4e76', fontSize: 15}}>Time: {item.time} <Icon name="clock-o" color="#E78200" size={15}/></Text>
                         </View>           
                     </Card>           
                 </View>

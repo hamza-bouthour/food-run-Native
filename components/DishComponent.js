@@ -83,8 +83,8 @@ function RenderDish(props) {
                         <View 
                             style={styles.cardCaptions}
                         >
-                            <Text style={{marginRight: 10, color: '#3b4e76', fontSize: 15}}>Cost: {dish.cost} <Icon name="clock-o" color="#E78200" size={15}/></Text>
-                            <Text style={{marginLeft: 5, color: '#3b4e76', fontSize: 15}}>Time: {dish.time} <Icon name="dollar" color="#E78200" size={15}/></Text>
+                            <Text style={{marginRight: 10, color: '#3b4e76', fontSize: 15}}>Cost: {dish.cost} <Icon name="dollar" color="#039FB6" size={15}/></Text>
+                            <Text style={{marginLeft: 5, color: '#3b4e76', fontSize: 15}}>Time: {dish.time} <Icon name="clock-o" color="#E78200" size={15}/></Text>
                         </View>       
                     </Card>           
                 </View>
