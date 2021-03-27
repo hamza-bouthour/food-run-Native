@@ -79,6 +79,7 @@ function RenderDish(props) {
                             style={{width: 362, height: 250,borderColor: '#039FB6', marginBottom: 2}}
                             resizeMode="cover"
                             source={{ uri: dish.img }}
+                            resizeMode={'cover'}
                         />
                         <View 
                             style={styles.cardCaptions}
@@ -255,6 +256,7 @@ render() {
                             }
                             return (
                                 <RenderProduct 
+                                    key={i}
                                     product={p} 
                                     addTocart={() => this.addTocart(p.productId)} 
                                     removeProductFromCart={() => this.props.removeProductFromCart(p.productId, p.price)} 
