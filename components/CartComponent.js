@@ -2,14 +2,10 @@ import React, { Component } from 'react';
 import { Text, View, ScrollView, FlatList, Modal, Button, StyleSheet, TextInput, Image, TouchableOpacity,Share, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { Card, Rating, Input, Tile, ListItem, Avatar } from 'react-native-elements';
-import { fetchProducts } from '../redux/ActionCreators';
-import { PRODUCTS } from '../shared/products';
 import BottomNavBarComponent from './BottomNavBarComponent';
 import { addProductToCart, removeAllProductsFromCart, removeProductFromCart } from '../redux/ActionCreators';
-import { SwipeRow } from 'react-native-swipe-list-view';
 import SwipeButton from 'rn-swipe-button';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { ListView } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 
 
@@ -43,6 +39,7 @@ function RenderCartProducts(props) {
                     <Image 
                         source={{uri: product.img}} 
                         style={styles.avatar}
+                        resizeMode={'cover'}
                     />
                     <Text
                         style={{marginVertical: 13, marginLeft: 8}}
@@ -104,19 +101,16 @@ function RenderProductLocal(props) {
             >
                 <Card 
                     key={product.productId}
-                    containerStyle={{borderColor: props.checked? '#E78200': '#3b4e76',padding: 0,
+                    containerStyle={{borderColor: props.checked? '#E78200': '#3b4e76',padding: 5,
                     borderRadius: 10, marginBottom: -10, opacity: props.checked? 0.2: 1.5}}  
                     title={product.name} 
                 >
                     <Image 
                         source={{uri: product.img}} 
-                        style={{width: 100, height: 100,marginHorizontal: 128}}
+                        style={{flex: 1,width: null, height: 100, marginHorizontal: 135, display: props.checked? 'none': 'flex'}}
                         resizeMode={'cover'}
                         />
                     <View>
-                        <Text style={{marginHorizontal: 155, marginTop: 10, color: 'green', fontSize: 13}}>
-                            CHECK
-                        </Text> 
                         
                     </View>
                 </Card>
@@ -228,25 +222,25 @@ toggleModal() {
                                 >
                                     <ScrollView>   
                                         <View 
-                                            style={{backgroundColor: 'white', flex: 1, marginBottom: 20}}>
+                                            style={{backgroundColor: 'white', flex: 1, marginBottom: 200}}>
                                             {productsCart.map(p => {
                                                 return (
                                                     <RenderProductLocal product={p} checked={this.state.productsChecked.includes(p.productId)} addToChecked={() => this.addToChecked(p.productId)}/>
                                                 )
                                             })}
+                                            </View>
+                                            </ScrollView>   
                                             <SwipeButton 
-                                                containerStyles={{marginTop: 50}}
-                                                title={<Icon name="long-arrow-right" color="#039FB6" size={45}/>}
-                                                thumbIconBackgroundColor="#039FB6" //(Optional)
-                                                thumbIconBorderColor="#039FB6" //(Optional)
-                                                railBackgroundColor="#3b4e76" //(Optional)
-                                                railBorderColor="#039FB6" //(Optional)
+                                                containerStyles={{position: 'absolute', bottom: 0, width: '100%', marginTop: 100, marginBottom: 10, marginLeft: 0, marginRight: 15}}
+                                                title={<Icon name="long-arrow-right" color="#3b4e76" size={45}/>}
+                                                thumbIconBackgroundColor="#3b4e76" //(Optional)
+                                                thumbIconBorderColor="#3b4e76" //(Optional)
+                                                railBackgroundColor="gray" //(Optional)
+                                                railBorderColor="#3b4e76" //(Optional)
                                                 onSwipeSuccess={() => {
                                                     this.toggleModal();
                                                 }}
                                             />
-                                        </View>
-                                    </ScrollView>   
                                 </Modal>
                             </TouchableOpacity>
                             <TouchableOpacity
