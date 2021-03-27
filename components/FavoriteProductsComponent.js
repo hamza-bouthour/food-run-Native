@@ -170,48 +170,59 @@ addTocart(productId) {
         } else
         return (
             <Animatable.View
-            animation='fadeInUp' 
-            duration={1000} 
-            delay={1000}
-            style={{flex: 1}}>
-           
+                animation='fadeInUp' 
+                duration={1000} 
+                delay={1000}
+                style={{flex: 1}}>
                 <ScrollView
-                
-                style={{marginBottom: 100}}   
-            >
-                {favoritesProducts.map(p => {
-                    return (
-                        <RenderCartProducts  product={p}
-                         key={p.productId}
-                        removeProductFromCart={() => this.props.removeProductFromCart(p.productId, p.price)}
-                        productInCart={this.props.populars.cart.products.includes(p.productId)}
-                        addTocart={() => this.addTocart(p.productId)} 
-                        removeProductFromFavorite={() => this.props.removeProductFromFavorite(p.productId)}
-                        />
-                    )
-                })}
-                    <View style={styles.controlContainer}>
+                    style={{marginBottom: 100}}   
+                >
+                    {favoritesProducts.map(p => {
+                        return (
+                            <RenderCartProducts  
+                                product={p}
+                                key={p.productId}
+                                removeProductFromCart={() => this.props.removeProductFromCart(p.productId, p.price)}
+                                productInCart={this.props.populars.cart.products.includes(p.productId)}
+                                addTocart={() => this.addTocart(p.productId)} 
+                                removeProductFromFavorite={() => this.props.removeProductFromFavorite(p.productId)}
+                            />
+                        )
+                    })}
+                    <View 
+                        style={styles.controlContainer}>
                         <TouchableOpacity 
                             onPress={() =>
                               this.props.removeAllProductsFromCart() 
                             }
                         >
-                            <Text style={{fontSize: 16, marginRight:20}}>remove all <Icon name="trash" color="#E78200" size={15}/></Text>
-                        </TouchableOpacity>
-                        <Text style={{fontSize: 16, marginLeft: 40}}> Total: {this.props.populars.cart.total}<Icon name="dollar" color="darkgreen" size={15}/></Text>
-                    </View> 
-                    <View style={{padding: 10}}>
-                            <Text>
-                                Products for: 
-                            {dishes.map((d,i) => {
-                                return <Text key={i} style={{color: '#3b4e76'}}> {d.name}, </Text>
-                                    
-                                
-                            })}
+                            <Text 
+                                style={{fontSize: 16, marginRight:20}}>remove all 
+                            <Icon 
+                                name="trash" 
+                                color="#E78200" 
+                                size={15}/>
                             </Text>
+                        </TouchableOpacity>
+                        <Text 
+                            style={{fontSize: 16, marginLeft: 40}}> Total: {this.props.populars.cart.total}
+                        <Icon 
+                            name="dollar" 
+                            color="darkgreen" 
+                            size={15}/>
+                        </Text>
+                    </View> 
+                    <View 
+                        style={{padding: 10}}>
+                        <Text>
+                            Products for: 
+                                {dishes.map((d,i) => {
+                                    return <Text key={i} style={{color: '#3b4e76'}}> {d.name}, </Text>      
+                                })}
+                        </Text>
                     </View>
-                    <View style={{padding: 10}}>
-
+                    <View 
+                        style={{padding: 10}}>
                         <TouchableOpacity
                             style={{ flexDirection: 'row', justifyContent: 'flex-start'}}
                             onPress={() => shareList('My list', favoritesProducts)} >
@@ -220,20 +231,14 @@ addTocart(productId) {
                                 name={'share-alt'}
                                 type='font-awesome'
                                 color='#E78200'
-                                size={18}
-                                
+                                size={18}    
                             />
                         </TouchableOpacity>
                     </View>
-                    </ScrollView>
-                    
-                    <View style={{position: 'absolute', bottom: 0, width: '100%', marginTop: 50}}>
-                    
-                        <BottomNavBarComponent  navigation={this.props.navigation}/>
-                    </View>
-               
-              
-           
+                </ScrollView>
+                <View style={{position: 'absolute', bottom: 0, width: '100%', marginTop: 50}}>
+                    <BottomNavBarComponent  navigation={this.props.navigation}/>
+                </View>
             </Animatable.View>
         )
     }

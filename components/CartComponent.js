@@ -32,35 +32,39 @@ function RenderCartProducts(props) {
 
         return (
             <Animatable.View
-            animation='zoomIn' 
-            duration={3000} 
-            delay={1000}>
-                    <Card 
-                        key={product.productId}
-                        wrapperStyle={styles.productsContainer} 
-                        containerStyle={{borderColor: '#039FB6',
-                        borderRadius: 10, marginBottom: -10 }}   
-                    >
-                        <Image 
-                            source={{uri: product.img}} 
-                            
-                            style={styles.avatar}
-    
-                            />
-                        <Text
-                            style={{marginVertical: 13, marginLeft: 8}}
-                        >   
-                            {product.name}
-                        </Text>
-                        <View style={styles.productBtn}>
-                            <Text style={{marginRight: 23, fontSize: 16}}>{product.price}<Icon name="dollar" color="darkgreen" size={15}/></Text>
+                animation='zoomIn' 
+                duration={3000} 
+                delay={1000}>
+                <Card 
+                    key={product.productId}
+                    wrapperStyle={styles.productsContainer} 
+                    containerStyle={{borderColor: '#039FB6', borderRadius: 10, marginBottom: -10 }}     
+                >
+                    <Image 
+                        source={{uri: product.img}} 
+                        style={styles.avatar}
+                    />
+                    <Text
+                        style={{marginVertical: 13, marginLeft: 8}}
+                    >   
+                        {product.name}
+                    </Text>
+                        <View 
+                            style={styles.productBtn}>
+                            <Text 
+                                style={{marginRight: 23, fontSize: 16}}>{product.price}
+                                <Icon 
+                                    name="dollar" 
+                                    color="darkgreen" 
+                                    size={15}
+                                />
+                            </Text>
                             {!props.productInCart ?
                                 <TouchableOpacity
-                                    // style={styles.productBtn}
                                     onPress={()=> {
                                         props.addTocart()
                                     }}
-                                    >
+                                >
                                     <Icon
                                         reverse
                                         name='plus-circle'
@@ -70,7 +74,6 @@ function RenderCartProducts(props) {
                                     />
                                 </TouchableOpacity> :
                                 <TouchableOpacity
-                                    // style={styles.productBtn}
                                     onPress={()=> {
                                         props.removeProductFromCart()
                                     }}
@@ -84,8 +87,8 @@ function RenderCartProducts(props) {
                                     />
                                 </TouchableOpacity>}
                         </View>
-                    </Card>
-                    </Animatable.View>
+                </Card>
+            </Animatable.View>
             
         )
     }
@@ -93,24 +96,20 @@ function RenderCartProducts(props) {
 function RenderProductLocal(props) {
     const {product} = props
     if (product) {
-
         return (
             <TouchableOpacity
-            // style={styles.productBtn}
                 onPress={()=> {
                     props.addToChecked(product.productId)
                 }}
             >
                 <Card 
                     key={product.productId}
-                   
                     containerStyle={{borderColor: props.checked? '#E78200': '#3b4e76',padding: 0,
                     borderRadius: 10, marginBottom: -10, opacity: props.checked? 0.2: 1.5}}  
                     title={product.name} 
                 >
                     <Image 
                         source={{uri: product.img}} 
-                        
                         style={{width: 100, height: 100,marginHorizontal: 128}}
                         resizeMode={'cover'}
                         />
@@ -127,7 +126,6 @@ function RenderProductLocal(props) {
 }
 const shareList = (title, message) => {
     const msg = message.map((m,i)=> {
-
      return ` ${i}: ${m.name} `
      })
     Share.share({
@@ -152,14 +150,11 @@ class Cart extends Component {
     static navigationOptions = {
         title: 'Your list'
 };
-// componentDidMount() {
 
-// }
 addToChecked(id) {
   this.setState({
     productsChecked: this.state.productsChecked.concat([id])
-  })
-    
+  })   
 }
 toggleModal() {
     this.setState({showModal: !this.state.showModal});
@@ -169,7 +164,6 @@ toggleModal() {
         const dishes = this.props.populars.populars.populars.filter(dish => this.props.populars.cart.dishes.includes(dish.id))
          if (this.props.populars.cart.products.length === 0) {
             return (
-
                 <View style={{flex: 1}}>
                     <ScrollView style={{padding: 80}}>
                     <Text style={{fontSize: 25}}>Your list is empty</Text>
@@ -183,117 +177,97 @@ toggleModal() {
                 </View>
             )
         } else
-        return (
-            <View style={{flex: 1}}>
-                <ScrollView
-                
-                style={{marginBottom: 100}}   
-            >
-                {productsCart.map(p => {
-                    return (
-                        <RenderCartProducts  product={p} key={p.productId} removeProductFromCart={() => this.props.removeProductFromCart(p.productId, p.price)} productInCart={this.props.populars.cart.products.includes(p.productId)}/>
-                    )
-                })}
-                    <View style={styles.controlContainer}>
-                        <TouchableOpacity 
-                            onPress={() =>
-                              this.props.removeAllProductsFromCart() 
-                            }
-                        >
-                            <Text style={{fontSize: 16, marginRight:20}}>remove all <Icon name="trash" color="#E78200" size={15}/></Text>
-                        </TouchableOpacity>
-                        <Text style={{fontSize: 16, marginLeft: 40}}> Total: {this.props.populars.cart.total}<Icon name="dollar" color="darkgreen" size={15}/></Text>
-                    </View> 
-                    <View style={{padding: 10}}>
-                            <Text>
-                                Products for: 
-                            {dishes.map((d,i) => {
-                                return <Text key={i} style={{color: '#3b4e76'}}> {d.name}, </Text>
-                                    
-                                
-                            })}
-                            </Text>
-                    </View>
-                    <View style={{padding: 10}}>
-                        <TouchableOpacity style={{marginTop: 20}}
-                            onPress={() => this.toggleModal()}
-                        >
-                            <View style={{ flexDirection: 'row',
-                            justifyContent: 'flex-start',}}>
-                                <Text>Start local shopping</Text>  
-                                <Icon 
-                                    name="mobile" 
-                                    color="#E78200" 
-                                    size={25}
-                                    style={{marginLeft: 8}}
-                                    />
-                            </View>
-                            
-                            
-                            
-                            <Modal
-                                visible={this.state.showModal}
-                                onRequestClose={() => this.toggleModal()}
-                                transparent={false}
-                                animationType={'slide'}
-                                fullscreen
-                                
+            return (
+                <View style={{flex: 1}}>
+                    <ScrollView
+                        style={{marginBottom: 100}}   
+                    >
+                        {productsCart.map(p => {
+                            return (
+                                <RenderCartProducts  product={p} key={p.productId} removeProductFromCart={() => this.props.removeProductFromCart(p.productId, p.price)} productInCart={this.props.populars.cart.products.includes(p.productId)}/>
+                            )
+                        })}
+                        <View style={styles.controlContainer}>
+                            <TouchableOpacity 
+                                onPress={() =>
+                                this.props.removeAllProductsFromCart() 
+                                }
                             >
-                            
-                               
-                            
-                            <ScrollView
-                                
-                            >   
-                            <View style={{backgroundColor: 'white', flex: 1, marginBottom: 20}}>
-                            {productsCart.map(p => {
-                                return (
-                                    <RenderProductLocal product={p} checked={this.state.productsChecked.includes(p.productId)} addToChecked={() => this.addToChecked(p.productId)}/>
-                                )
-                            })}
-                         
-                            <SwipeButton 
-                            containerStyles={{marginTop: 50}}
-                            title={<Icon name="long-arrow-right" color="#039FB6" size={45}/>}
-                            // railFillBackgroundColor="#E78200" //(Optional)
-                            // railFillBorderColor="#E78200" //(Optional)
-                            thumbIconBackgroundColor="#039FB6" //(Optional)
-                            thumbIconBorderColor="#039FB6" //(Optional)
-                            railBackgroundColor="#3b4e76" //(Optional)
-                            railBorderColor="#039FB6" //(Optional)
-                            onSwipeSuccess={() => {
-                                this.toggleModal();
-                              }}
-                        />
-                            </View>
-                            </ScrollView>
-                        
+                                <Text style={{fontSize: 16, marginRight:20}}>remove all <Icon name="trash" color="#E78200" size={15}/></Text>
+                            </TouchableOpacity>
+                            <Text style={{fontSize: 16, marginLeft: 40}}> Total: {this.props.populars.cart.total}<Icon name="dollar" color="darkgreen" size={15}/></Text>
+                        </View> 
+                        <View style={{padding: 10}}>
+                                <Text>
+                                    Products for: 
+                                {dishes.map((d,i) => {
+                                    return <Text key={i} style={{color: '#3b4e76'}}> {d.name}, </Text>   
+                                })}
+                                </Text>
+                        </View>
+                        <View style={{padding: 10}}>
+                            <TouchableOpacity style={{marginTop: 20}}
+                                onPress={() => this.toggleModal()}
+                            >
+                                <View style={{ flexDirection: 'row',
+                                justifyContent: 'flex-start',}}>
+                                    <Text>Start local shopping</Text>  
+                                    <Icon 
+                                        name="mobile" 
+                                        color="#E78200" 
+                                        size={25}
+                                        style={{marginLeft: 8}}
+                                        />
+                                </View>
+                                <Modal
+                                    visible={this.state.showModal}
+                                    onRequestClose={() => this.toggleModal()}
+                                    transparent={false}
+                                    animationType={'slide'}
+                                    fullscreen
+                                >
+                                    <ScrollView>   
+                                        <View 
+                                            style={{backgroundColor: 'white', flex: 1, marginBottom: 20}}>
+                                            {productsCart.map(p => {
+                                                return (
+                                                    <RenderProductLocal product={p} checked={this.state.productsChecked.includes(p.productId)} addToChecked={() => this.addToChecked(p.productId)}/>
+                                                )
+                                            })}
+                                            <SwipeButton 
+                                                containerStyles={{marginTop: 50}}
+                                                title={<Icon name="long-arrow-right" color="#039FB6" size={45}/>}
+                                                thumbIconBackgroundColor="#039FB6" //(Optional)
+                                                thumbIconBorderColor="#039FB6" //(Optional)
+                                                railBackgroundColor="#3b4e76" //(Optional)
+                                                railBorderColor="#039FB6" //(Optional)
+                                                onSwipeSuccess={() => {
+                                                    this.toggleModal();
+                                                }}
+                                            />
+                                        </View>
+                                    </ScrollView>   
+                                </Modal>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{ flexDirection: 'row', justifyContent: 'flex-start'}}
+                                onPress={() => shareList('My list', productsCart)} >
+                                <Text>Share list </Text>
+                                <Icon
+                                    name={'share-alt'}
+                                    type='font-awesome'
+                                    color='#E78200'
+                                    size={18}
                                     
-                            </Modal>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={{ flexDirection: 'row', justifyContent: 'flex-start'}}
-                            onPress={() => shareList('My list', productsCart)} >
-                            <Text>Share list </Text>
-                            <Icon
-                                name={'share-alt'}
-                                type='font-awesome'
-                                color='#E78200'
-                                size={18}
-                                
-                            />
-                        </TouchableOpacity>
-                    </View>
+                                />
+                            </TouchableOpacity>
+                        </View>
                     </ScrollView>
-                    
-                    <View style={{position: 'absolute', bottom: 0, width: '100%', marginTop: 50}}>
-                    
-                        <BottomNavBarComponent  navigation={this.props.navigation}/>
-                    </View>
-               
-              
-            </View>
-        )
+                        <View style={{position: 'absolute', bottom: 0, width: '100%', marginTop: 50}}>
+                            <BottomNavBarComponent  navigation={this.props.navigation}/>
+                        </View>
+                </View>
+            )
     }
 }
 const styles = StyleSheet.create({
@@ -302,8 +276,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         borderColor: 'green',
-      
-     
     },
     container: {
         flex: 1,
@@ -311,11 +283,7 @@ const styles = StyleSheet.create({
       },
     productsContainerView: {
         padding: 0,
-        // flexDirection: 'row',
-        // justifyContent: 'flex-start',
         borderColor: 'green',
-      
-     
     },
     bottomView: {
         width: '100%',
@@ -365,9 +333,4 @@ const styles = StyleSheet.create({
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);
 
-// <SwipeRow leftOpenValue={100} >
-//                                     <View>
-//                                        <Text>swipte</Text>
-//                                     </View>
-//                                 </SwipeRow>
 

@@ -44,8 +44,15 @@ const BottomNavBarComponent = (props) => {
                     color="#E78200"
                     onPress={() => navigation.navigate('Cart')}
                     style={{marginTop: 8}}
-                    ><Text style={{fontSize: 18}}>(<Text style={{color: 'white'}}>{props.populars.cart.products.length}</Text>)</Text></Icon>
-                    <Text style={{fontSize: 18, color: 'white',marginTop: 7}}>{props.populars.cart.total}<Icon name="dollar" color="#039FB6" size={15}/></Text>  
+                >
+                    <Text 
+                        style={{fontSize: 18}}>(
+                            <Text 
+                                style={{color: 'white'}}>{props.populars.cart.products.length}
+                            </Text>)
+                    </Text>
+                </Icon>
+                <Text style={{fontSize: 18, color: 'white',marginTop: 7}}>{props.populars.cart.total}<Icon name="dollar" color="#039FB6" size={15}/></Text>  
             </View>
         )
     

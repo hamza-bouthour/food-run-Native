@@ -139,15 +139,12 @@ handleAccount() {
                                 }}
                             />
                         </View>
-                        <View style={{  
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            marginBottom: 40}}>
+                        <View 
+                            style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 40}}>
                             <Image 
                                 source={{ uri: this.props.populars.account.photo }}
                                 style={styles.image}
                             />
-                         
                         </View>
                         <Text>Hello, 
                             <Text 
@@ -157,9 +154,6 @@ handleAccount() {
                         <View style={styles.text}>
                             <Text>Thanks for checking Food-Run,</Text>
                             <Text>Please look up my:</Text>
-                            <View style={{marginHorizontal: 10}}>
-                                
-                            </View>
                         </View>
                         <View style={styles.links}>
                             {links.map((x,i) => {
