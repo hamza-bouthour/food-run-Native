@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, FlatList, Modal, Button, StyleSheet, TextInput, Image, TouchableOpacity,Share, Dimensions } from 'react-native';
+import { Text, View, ScrollView, FlatList, Modal, Button, StyleSheet, TextInput, Image, TouchableOpacity,Share, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { Card, Rating, Input, Tile, ListItem, Avatar } from 'react-native-elements';
 import { fetchProducts } from '../redux/ActionCreators';
-
+import * as Animatable from 'react-native-animatable';
 import BottomNavBarComponent from './BottomNavBarComponent';
-import { addProductToCart, removeAllProductsFromCart,   addProductToTotal, removeProductFromCart } from '../redux/ActionCreators';
+import { addProductToCart, removeAllProductsFromCart,removeProductFromFavorite,   addProductToTotal, removeProductFromCart } from '../redux/ActionCreators';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import SwipeButton from 'rn-swipe-button';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -16,11 +16,11 @@ import { PRODUCTS } from '../shared/products';
 const mapDispatchToProps = {
    
     addProductToCart,
-    removeProductFromCart,
     removeAllProductsFromCart,
     fetchProducts,
     addProductToTotal,
     removeProductFromCart, 
+    removeProductFromFavorite
 
 };
 const mapStateToProps = (populars, products, cart, favoriteProducts) => {
@@ -36,7 +36,20 @@ function RenderCartProducts(props) {
     if (product) {
 
         return (
+           
+           
+            <TouchableWithoutFeedback
+                
+                // onPress={() =>
+                //    props.removeProductFromFavorite()
+                // }
+                onLongPress={()=> props.removeProductFromFavorite()}
+            >
+                        
+                
             
+            
+    
                     <Card 
                         key={product.productId}
                         wrapperStyle={styles.productsContainer} 
@@ -73,9 +86,9 @@ function RenderCartProducts(props) {
                                 </TouchableOpacity> :
                                 <TouchableOpacity
                                     // style={styles.productBtn}
-                                    onPress={()=> {
+                                    onPress={()=> 
                                         props.removeProductFromCart()
-                                    }}
+                                    }
                                 >
                                     <Icon
                                         reverse
@@ -87,7 +100,7 @@ function RenderCartProducts(props) {
                                 </TouchableOpacity>}
                         </View>
                     </Card>
-            
+                    </TouchableWithoutFeedback>
         )
     }
 }
@@ -156,7 +169,12 @@ addTocart(productId) {
             )
         } else
         return (
-            <View style={{flex: 1}}>
+            <Animatable.View
+            animation='fadeInUp' 
+            duration={1000} 
+            delay={1000}
+            style={{flex: 1}}>
+           
                 <ScrollView
                 
                 style={{marginBottom: 100}}   
@@ -168,6 +186,7 @@ addTocart(productId) {
                         removeProductFromCart={() => this.props.removeProductFromCart(p.productId, p.price)}
                         productInCart={this.props.populars.cart.products.includes(p.productId)}
                         addTocart={() => this.addTocart(p.productId)} 
+                        removeProductFromFavorite={() => this.props.removeProductFromFavorite(p.productId)}
                         />
                     )
                 })}
@@ -214,7 +233,8 @@ addTocart(productId) {
                     </View>
                
               
-            </View>
+           
+            </Animatable.View>
         )
     }
 }
@@ -292,4 +312,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(FavoriteProducts);
 //                                        <Text>swipte</Text>
 //                                     </View>
 //                                 </SwipeRow>
+
+// <Icon
+// name={props.favorite ? "star": "star-o"}
+// size={35}
+// color="#E78200"
+// style={styles.likeIcon}
+// />
 

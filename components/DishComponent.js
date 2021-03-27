@@ -13,7 +13,6 @@ import { SwipeRow } from 'react-native-swipe-list-view';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import BottomNavBarComponent from './BottomNavBarComponent';
 import Loading from './LoadingComponent';
-// import { SwipeUpDown } from 'react-native-swipe-up-down';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 import * as Animatable from 'react-native-animatable';
 import * as Notifications from 'expo-notifications';
@@ -68,10 +67,10 @@ function RenderDish(props) {
                             
                     
                     <Icon
-                    name={props.favorite ? "star": "star-o"}
-                    size={35}
-                    color="#E78200"
-                    style={styles.likeIcon}
+                        name={props.favorite ? "star": "star-o"}
+                        size={35}
+                        color="#E78200"
+                        style={styles.likeIcon}
                     />
                 </TouchableOpacity>
             </View>
@@ -281,7 +280,11 @@ render() {
         const products = this.props.populars.products.products.filter(product => product.dishId.includes(dishPopularId))
 
         return (
-           <View >
+            <Animatable.View
+            animation='fadeInRightBig' 
+            duration={1000} 
+            delay={1000}
+            style={{flex: 1}}>
             <ScrollView style={{marginBottom: 50}}>
                 
                 <RenderDish dish={dish} favorite={this.props.populars.favorites.includes(dishPopularId)} markFavorite={() => this.markFavorite(dishPopularId)}/>
@@ -318,7 +321,7 @@ render() {
                         <BottomNavBarComponent  navigation={this.props.navigation}/>
                     </View>
               
-            </View>
+            </Animatable.View>
         )
     }
 }

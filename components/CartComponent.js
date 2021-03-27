@@ -33,7 +33,7 @@ function RenderCartProducts(props) {
         return (
             <Animatable.View
             animation='zoomIn' 
-            duration={2000} 
+            duration={3000} 
             delay={1000}>
                     <Card 
                         key={product.productId}

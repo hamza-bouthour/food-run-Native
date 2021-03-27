@@ -12,11 +12,8 @@ import Favorites from './FavoritesComponent';
 import Account from './AccountComponent';
 import FavoriteProducts from './FavoriteProductsComponent'
 import { fetchPopulars } from '../redux/ActionCreators'
-import { populars } from '../redux/popularDishesReducer';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-// import { NavigationContainer } from '@react-navigation/native';
-// import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const mapDispatchToProps = {
     fetchPopulars
@@ -258,27 +255,20 @@ const MainNavigator = createDrawerNavigator(
 const AppNavigator = createAppContainer(MainNavigator)
 
  class Main extends Component {
-     constructor(props) {
-         super(props)
- }
-
     render() {
         return (
             <View
-            style={{
-                flex: 1,
-                paddingTop: Platform.OS === 'ios' ? 0 : Expo.Constants.statusBarHeight
-                
-        }}>
-                
-        
-      
-            <AppNavigator />
-         
+                style={{
+                    flex: 1,
+                    paddingTop: Platform.OS === 'ios' ? 0 : Expo.Constants.statusBarHeight
+                    
+                }}>
+                <AppNavigator />
             </View>
         )
     }
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,

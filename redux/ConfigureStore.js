@@ -8,12 +8,19 @@ import { account } from './accountReducer';
 import { favoriteProducts } from './favoriteProductsReducer'
 import { composeWithDevTools } from 'redux-devtools-extension';
 import logger from 'redux-logger';
+import { persistStore, persistCombineReducers } from 'redux-persist';
+import storage from 'redux-persist/es/storage';
 
+const config = {
+    key: 'root',
+    storage,
+    debug: true
+}
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 export const ConfigureStore = () => {
     const store = createStore(
-        combineReducers({
+        persistCombineReducers(config, {
             products,
             populars,
             cart,
@@ -24,5 +31,7 @@ export const ConfigureStore = () => {
         composeWithDevTools(applyMiddleware(thunk, logger))
     );
 
-    return store;
+    const persistor = persistStore(store);
+
+    return { persistor, store };
 }

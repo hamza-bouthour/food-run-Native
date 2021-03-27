@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, FlatList, Modal, Button, StyleSheet, TextInput, Linking, TouchableOpacity } from 'react-native';
-import { Card, Icon, Rating, Input } from 'react-native-elements';
+import { Text, View, ScrollView,  StyleSheet, Linking, TouchableOpacity, Image } from 'react-native';
+import { Input, Button } from 'react-native-elements';
 import { connect } from 'react-redux';
-import { addAccount } from '../redux/ActionCreators';
-import { Link } from '@react-navigation/native';
+import { addAccount, logOut, takePhoto } from '../redux/ActionCreators';
 import BottomNavBarComponent from './BottomNavBarComponent'
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 
 
 const mapDispatchToProps = {
-    addAccount
+    addAccount,
+    logOut,
+    takePhoto
 };
 const mapStateToProps = (populars, products, account) => {
     return {
@@ -43,12 +48,29 @@ const ExternalLink = (props) => {
          this.state= {
              username: null,
              email: null,
-             password: null
+             password: null,
+             imageUrl: null
          }
      }
     static navigationOptions = {
         title: 'Account'
 };
+getImageFromCamera = async () => {
+    const cameraPermission = await Permissions.askAsync(Permissions.CAMERA);
+    const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+    if (cameraPermission.status === 'granted' && cameraRollPermission.status === 'granted') {
+        const capturedImage = await ImagePicker.launchCameraAsync({
+            allowsEditing: true,
+            aspect: [1, 1]
+        });
+        if (!capturedImage.cancelled) {
+            console.log(capturedImage);
+            this.props.takePhoto(capturedImage.uri)
+            this.setState({imageUrl: capturedImage.uri});
+        }
+    }
+}
 handleAccount() {
     this.props.addAccount(this.state.username, this.state.email, this.state.password)
 }
@@ -71,61 +93,95 @@ handleAccount() {
                         onChangeText={values => this.setState({password: values})}
                         value={this.state.password}
                     />
-                    <View style={{marginHorizontal: 10}}>
-                                <Button 
-                                    title='Sign-up'
-                                    color='#3b4e76'
-                                    onPress={ () => {
-                                        this.handleAccount();
-                                        
-                                    }}
-                                />
+                    <View 
+                        style={{marginTop: 10, flexDirection: 'row',justifyContent: 'center',}}
+                    >
+                        <Button 
+                            title='Sign-up'
+                            containerStyle={{color:'#3b4e76'}}
+                            color='#3b4e76'
+                            buttonStyle={{marginRight: 10, backgroundColor: '#E78200'}}
+                            onPress={ () => {
+                                this.handleAccount();
+                            
+                                
+                            }}
+                        />
+                        <Button 
+                            title='Avatar'
+                            color='#3b4e76'
+                            buttonStyle={{marginLeft: 10, backgroundColor: '#3b4e76'}}
+                            onPress={ () => {
+                                this.getImageFromCamera();
+                                
+                            }}
+                        />
                     </View>
                     <View style={{position: 'absolute', bottom: 0, width: '100%', marginTop: 50, marginBottom: 0}}>
- 
-                    <BottomNavBarComponent  navigation={this.props.navigation}/>
+                        <BottomNavBarComponent  navigation={this.props.navigation}/>
+                    </View>
                 </View>
-                </View>
-        
             )
         }
         else {
             return (
-                    <View style={styles.profile}>
-                        <ScrollView style={{padding: 20}}>
-                            
-                            <Text>Hello, <Text style={{fontSize: 20}}>{this.props.populars.account.username}!</Text></Text>
-                            <View style={styles.text}>
-                                <Text>Thanks for checking Food-Run,</Text>
-                                <Text>Please look up my:</Text>
+                <View style={styles.profile}>
+                    <ScrollView style={{padding: 20}}>
+                        <View
+                            style={{flexDirection: 'row', justifyContent: 'flex-end',}}                
+                        >
+                            <Icon 
+                                name='sign-out'
+                                color='#039FB6'  
+                                size={25}
+                                onPress={ () => {
+                                    this.props.logOut();    
+                                }}
+                            />
+                        </View>
+                        <View style={{  
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            marginBottom: 40}}>
+                            <Image 
+                                source={{ uri: this.props.populars.account.photo }}
+                                style={styles.image}
+                            />
+                         
+                        </View>
+                        <Text>Hello, 
+                            <Text 
+                                style={{fontSize: 20}}> {this.props.populars.account.username}!
+                            </Text>
+                        </Text>
+                        <View style={styles.text}>
+                            <Text>Thanks for checking Food-Run,</Text>
+                            <Text>Please look up my:</Text>
+                            <View style={{marginHorizontal: 10}}>
+                                
                             </View>
-                            <View style={styles.links}>
-                            {links.map(x => {
+                        </View>
+                        <View style={styles.links}>
+                            {links.map((x,i) => {
                                 return (
-                                    <ExternalLink url={x.url}>
+                                    <ExternalLink url={x.url} key={i}>
                                         {x.name}
                                     </ExternalLink>
                                 )
-                            }
-                                
-
-                                
-                                )}
-                            </View>
-                            </ScrollView>
-                        <View style={{position: 'absolute', bottom: 0, width: '100%', margin: 0, marginBottom: 0}}>
- 
-                        <BottomNavBarComponent  navigation={this.props.navigation}/>
+                            })}  
                         </View>
+                    </ScrollView>
+                    <View style={{position: 'absolute', bottom: 0, width: '100%', margin: 0, marginBottom: 0}}>
+                        <BottomNavBarComponent  navigation={this.props.navigation}/>
                     </View>
+                </View>
             )
         }
     }
 }
 const styles = StyleSheet.create({
     form: {
-        padding: 20,
-        marginTop: 20,
+        marginTop: 40,
         flex: 1
     },
     profile: {
@@ -141,6 +197,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         marginTop: -20
+    },
+    image: {
+        width: 160,
+        height: 160,
+        borderRadius: 150
     }
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Account);

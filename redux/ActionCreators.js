@@ -98,3 +98,15 @@ export const addProductToFavorite = (productId) => ({
     type: ActionTypes.ADD_PRODUCT_TO_FAVORITE,
     payload: productId
 })
+export const removeProductFromFavorite = (productId) => ({
+    type: ActionTypes.REMOVE_PRODUCT_FROM_FAVORITE,
+    payload: productId
+})
+
+export const logOut = () => ({
+    type: ActionTypes.LOGOUT
+})
+export const takePhoto = (uri) => ({
+    type: ActionTypes.TAKE_PHOTO,
+    payload: uri
+})
