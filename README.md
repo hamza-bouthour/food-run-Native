@@ -5,3 +5,4 @@ shopping list based on their preffered meals or suggested dishes.
 Some of the technologies used in this project are:
 redux, redux persistor, expo tools and apis such as image picker and notifications.
 expo: https://expo.io/@hamzabouthour/projects/foodrun
+LinkedIn: https://www.linkedin.com/in/hamza-bouthour-a0265919b/
