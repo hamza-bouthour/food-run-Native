@@ -3,12 +3,28 @@ import { POPULARS } from '../shared/populars';
 import { PRODUCTS } from '../shared/products'
 import { products } from './productsReducer';
 
+const popularsUrl = 'http://192.168.253.168:3000/populars'
 // POPULAR DISHES ACTIONS
 export const fetchPopulars = () => dispatch => {
     dispatch(popularsLoading())
-    setTimeout(() => {
-        dispatch(addPopulars(POPULARS))
-    }, 1000);
+    fetch(popularsUrl, {
+        method: 'GET', // or 'PUT'
+        headers: {
+            'Content-Type': 'application/json',
+        }
+        })
+        .then(response => response.json())
+        .then(data => {
+                dispatch(addPopulars(data))
+        })
+        .then(data => {
+        console.log('Success:', data);
+        })
+        .catch((error) => {
+        console.error('Error:', error);
+        });
+    
+
 }
 export const popularsLoading = () => ({
     type: ActionTypes.POPULARS_LOADING

@@ -79,7 +79,7 @@ static navigationOptions = {
                 <FlatList
                     data={this.props.populars.populars.populars}
                     renderItem={renderDirectoryItem}
-                    keyExtractor={item => item.id.toString()}
+                    keyExtractor={item => item._id.toString()}
                     horizontal={false}
                     numColumns={1}
                 />

@@ -1,6 +1,7 @@
 import * as ActionTypes from './ActionTypes';
 
 export const populars = (state = {isLoading: true, errMess: null, populars: []}, action) => {
+    console.log(action)
     switch (action.type) {
         case ActionTypes.ADD_POPULARS:
             return {...state, isLoading: false, errMess: null, populars: action.payload};
